@@ -6,4 +6,30 @@
     <title>Rabbit Hole Files</title>
     <link rel="stylesheet" href="style.css" />
   </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>The Rabbit Hole</h1>
+        <p>Documenting random descents into the unknown.</p>
+      </header>
+
+      <section class="entry-form">
+        <input
+          type="text"
+          id="topic"
+          placeholder="Topic (e.g., Dyson Sphere logistics)"
+        />
+        <textarea id="notes" placeholder="What did you find out?"></textarea>
+        <button id="save-btn">Log Entry</button>
+      </section>
+
+      <hr />
+
+      <section id="journal-output" class="journal-list">
+        <!--entries will appear here-->
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
 </html>
