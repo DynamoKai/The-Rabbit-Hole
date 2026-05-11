@@ -2,7 +2,7 @@
   --bg-color: #0f172a;
   --card-bg: #1e293b;
   --text-primary: #f8fafc;
-  --accent: #38bdf8;
+  --accent: #38f2f843;
   --border: #334155;
 }
 
@@ -37,7 +37,7 @@ h1 {
   background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
 }
 
 input,
@@ -80,4 +80,33 @@ button:hover {
 
 .journal-entry small {
   color: #94a3b8;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.secondary-btn {
+  background: transparent;
+  color: #ef4444;
+}
+
+.secondary-btn:hover {
+  background: #ef4444;
+  color: #0f172a;
+}
+
+/*Style for the individual delete button */
+.delete-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 0.8rem;
+  float: right;
+}
+
+.delete-btn:hover {
+  color: #ef4444;
 }
