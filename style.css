@@ -111,3 +111,39 @@ button:hover {
 .delete-btn:hover {
   color: #ef4444;
 }
+
+/* Style for the Utility Buttons (Tops) */
+.file-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.util-btn {
+  background: #334155;
+  color: #94a3b8;
+  border: none;
+  padding: 5px 10px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Tag Pill Style */
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 8px 0;
+}
+
+.tag-pill {
+  background: rgba (56, 189, 248, 0.1);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}

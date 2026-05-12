@@ -1,35 +1,70 @@
 const saveBtn = document.getElementById("save-btn");
 const clearAllBtn = document.getElementById("clear-all-btn");
 const journalOutput = document.getElementById("journal-output");
+const importInput = document.getElementById("import-input");
 
 // Load existing entries from LocalStorage on startup
 
 window.onload = displayEntries;
 
-// 1. Save entry logic
+// 1. Logic for Processing Tags and Saving
 saveBtn.addEventListener("click", () => {
   const topic = document.getElementById("topic").value;
   const notes = document.getElementById("notes").value;
+  const tagsRaw = document.getElementById("tags").value;
   const date = new Date().toLocaleDateString();
 
   if (topic && notes) {
-    const entry = { topic, notes, date };
+    // Convert comma-separated string into a clean array
+    // const entry = { topic, notes, date };
+    const tags = tagsRaw
+      .split(",")
+      .map((t) => t.trim())
+      .filter((t) => t !== "");
 
     // Get old entries. add new one, and save back to local storage
 
     const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-    entries.unshift({ topic, notes, date }); //Add newst to the top
+    entries.unshift({ topic, notes, tags, date }); //Add newst to the top
     localStorage.setItem("rabbitHoles", JSON.stringify(entries));
 
     displayEntries();
-
-    // Clear inputs
+    // Reset fields
     document.getElementById("topic").value = "";
     document.getElementById("notes").value = "";
+    document.getElementById("tags").value = "";
   }
 });
 
-// 2. Clear All Logic
+// 2. Export to JSON File
+document.getElementById("export-btn").addEventListener("click", () => {
+  const data = localStorage.getItem("rabbitHoles");
+  if (!data) return alert("Curiouser and curiouser");
+
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `rabbit-holes-${new Data().toISOString().slice(0, 10)}.json`;
+  a.click();
+});
+
+// 3. Import from JSON File
+document
+  .getElementById("import-btn")
+  .addEventListener("click", () => importInput.click());
+
+importInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    localStorage.setItem("rabbitHoles", event.target.result);
+    displayEntries();
+  };
+  reader.readAsText(file);
+});
+
+// 4. Clear All Logic
 clearAllBtn.addEventListener("click", () => {
   if (confirm("Are you sure you want to delete all entries?")) {
     localStorage.removeItem("rabbitHoles");
@@ -47,7 +82,7 @@ function deleteEntry(index) {
 
 function displayEntries() {
   const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-  // We use the index (i) to tell the delete button which entry to remove
+  // I am using the index (i) to tell the delete button which entry to remove
   journalOutput.innerHTML = entries
     .map(
       (e, i) => `
@@ -55,6 +90,14 @@ function displayEntries() {
       <button class="delete-btn" onclick="deleteEntry(${i})">✕ Delete</button>
       <small>${e.date}</small>
       <h3>${e.topic}</h3>
+      <div class="tag-container">
+        ${e.tags
+          .map(
+            (tag) => `<span
+          class="tag-pill">${tag}</span>`,
+          )
+          .join(``)}
+          </div>
       <p>${e.notes}</p>
     </div>
     `,
