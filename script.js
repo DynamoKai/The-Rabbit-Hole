@@ -80,10 +80,18 @@ function deleteEntry(index) {
   displayEntries();
 }
 
-function displayEntries() {
+function displayEntries(filter = "") {
   const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
   // I am using the index (i) to tell the delete button which entry to remove
-  journalOutput.innerHTML = entries
+  const journalOutput = document.getElementById("journal-output");
+
+  // The filter logic should check if any tag in the entry includes the search term
+  const filteredEntries = entries.filter((entry) => {
+    if (!filter) return true; // Show all if filter is empty
+    return entry.tags.some((tag) => tag.toLowerCase().includes(filter));
+  });
+
+  journalOutput.innerHTML = filteredEntries
     .map(
       (e, i) => `
     <div class="journal-entry">
@@ -92,10 +100,15 @@ function displayEntries() {
       <h3>${e.topic}</h3>
       <div class="tag-container">
         ${e.tags
-          .map(
-            (tag) => `<span
-          class="tag-pill">${tag}</span>`,
-          )
+          .map((tag) => {
+            // Visually highlight the matching tag
+            const isMatch =
+              filter && tag.toLowerCase().includes(filter) ? " match" : "";
+            return;
+            `<span
+          class="tag-pill" ${isMatch}
+          >${tag}</span>`;
+          })
           .join(``)}
           </div>
       <p>${e.notes}</p>

@@ -147,3 +147,29 @@ button:hover {
   font-size: 0.7rem;
   text-transform: uppercase;
 }
+
+.filter-section {
+  margin: 2rem 0 1rem 0;
+}
+
+#tag-filter {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--border);
+  color: var(--accent);
+  font-style: italic;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+#tag-filter:focus {
+  border-bottom-color: var(--accent);
+}
+
+/* This highlights tags that match the filter */
+.tag-pill.match {
+  background: var(--accent);
+  color: #0f172a;
+}
