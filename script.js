@@ -10,16 +10,19 @@ document.getElementById("tag-filter").addEventListener("input", (e) => {
 
 window.onload = displayEntries;
 
-// 1. Logic for Processing Tags and Saving
+let sortNewestFirst = true;
+
+// LOGIC FOR PROCESS TAGS AND SAVING
 saveBtn.addEventListener("click", () => {
   const topic = document.getElementById("topic").value;
   const notes = document.getElementById("notes").value;
   const tagsRaw = document.getElementById("tags").value;
   const date = new Date().toLocaleDateString();
+  const timestamp = Date.now(); // for accurate sorting
 
   if (topic && notes) {
     // Convert comma-separated string into a clean array
-    // const entry = { topic, notes, date };
+    // Const entry = { topic, notes, date };
     const tags = tagsRaw
       .split(",")
       .map((t) => t.trim())
@@ -27,7 +30,9 @@ saveBtn.addEventListener("click", () => {
 
     // Get old entries. add new one, and save back to local storage
     const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-    entries.unshift({ topic, notes, tags, date }); //Add newst to the top
+
+    // Added timestamp for record
+    entries.unshift({ topic, notes, tags, date, timestamp });
     localStorage.setItem("rabbitHoles", JSON.stringify(entries));
 
     displayEntries();
@@ -38,7 +43,17 @@ saveBtn.addEventListener("click", () => {
   }
 });
 
-// 2. Export to JSON File
+// SORT BUTTON LOGIC
+(document.getElementById("sort-btn").addEventListener("click"),
+  (e) => {
+    sortNewestFirst = !sortNewestFirst;
+    e.target.innerText = sortNewestFirst
+      ? "Sort: Newest First"
+      : "Sort: Oldest First";
+    displayEntries(document.getElementById("tag-filter").value.toLowerCase());
+  });
+
+// EXPORT TO JSON FILE
 document.getElementById("export-btn").addEventListener("click", () => {
   const data = localStorage.getItem("rabbitHoles");
   if (!data) return alert("Curiouser and curiouser");
@@ -51,7 +66,7 @@ document.getElementById("export-btn").addEventListener("click", () => {
   a.click();
 });
 
-// 3. Import from JSON File
+// IMPORT FROM JSON FILE
 document
   .getElementById("import-btn")
   .addEventListener("click", () => importInput.click());
@@ -66,7 +81,7 @@ importInput.addEventListener("change", (e) => {
   reader.readAsText(file);
 });
 
-// 4. Clear All Logic
+// CLEAR ALL LOGIC
 clearAllBtn.addEventListener("click", () => {
   if (confirm("Are you sure you want to delete all entries?")) {
     localStorage.removeItem("rabbitHoles");
@@ -74,31 +89,37 @@ clearAllBtn.addEventListener("click", () => {
   }
 });
 
-// 3. Individual Delete Logic
-function deleteEntry(index) {
-  const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-  entries.splice(index, 1); // Remove 1 item at the specific index
+// INDIVIDUAL DELETE LOGIC
+function deleteEntry(timestamp) {
+  let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
+  entries = entries.filter((e) => e.timestamp !== timestamp);
   localStorage.setItem("rabbitHoles", JSON.stringify(entries));
   displayEntries();
 }
 
+// DISPLAY LOGIC
 function displayEntries(filter = "") {
   const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-
-  // I am using the index (i) to tell the delete button which entry to remove
   const journalOutput = document.getElementById("journal-output");
 
   // The filter logic should check if any tag in the entry includes the search term
-  const filteredEntries = entries.filter((entry) => {
+  let filteredEntries = entries.filter((entry) => {
     if (!filter) return true; // Show all if filter is empty
     return entry.tags.some((tag) => tag.toLowerCase().includes(filter));
+  });
+
+  // SORT
+  filteredEntries.sort((a, b) => {
+    return sortNewestFirst
+      ? b.timestamp - a.timestamp
+      : a.timestamp - b.timestamp;
   });
 
   journalOutput.innerHTML = filteredEntries
     .map(
       (e, i) => `
     <div class="journal-entry">
-      <button class="delete-btn" onclick="deleteEntry(${i})">✕ Delete</button>
+      <button class="delete-btn" onclick="deleteEntry(${e.timestamp})">✕ Delete</button>
       <small>${e.date}</small>
       <h3>${e.topic}</h3>
       <div class="tag-container">
@@ -107,11 +128,10 @@ function displayEntries(filter = "") {
             // Visually highlight the matching tag
             const isMatch =
               filter && tag.toLowerCase().includes(filter) ? " match" : "";
-            `<span class='tag-pill${isMatch}'
+            return `<span class='tag-pill${isMatch}'
           >${tag}</span>`;
-            return;
           })
-          .join(``)}
+          .join("")}
           </div>
       <p>${e.notes}</p>
     </div>
