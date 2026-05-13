@@ -4,6 +4,9 @@ const journalOutput = document.getElementById("journal-output");
 const importInput = document.getElementById("import-input");
 
 // Load existing entries from LocalStorage on startup
+document.getElementById("tag-filter").addEventListener("input", (e) => {
+  displayEntries(e.target.value.toLowerCase());
+});
 
 window.onload = displayEntries;
 
@@ -23,11 +26,6 @@ saveBtn.addEventListener("click", () => {
       .filter((t) => t !== "");
 
     // Get old entries. add new one, and save back to local storage
-
-    document.getElementById("tag-filter").addEventListener("input", (e) => {
-      displayEntries(e.target.value.toLowerCase());
-    });
-
     const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
     entries.unshift({ topic, notes, tags, date }); //Add newst to the top
     localStorage.setItem("rabbitHoles", JSON.stringify(entries));
@@ -86,6 +84,7 @@ function deleteEntry(index) {
 
 function displayEntries(filter = "") {
   const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
+
   // I am using the index (i) to tell the delete button which entry to remove
   const journalOutput = document.getElementById("journal-output");
 
@@ -110,6 +109,7 @@ function displayEntries(filter = "") {
               filter && tag.toLowerCase().includes(filter) ? " match" : "";
             `<span class='tag-pill${isMatch}'
           >${tag}</span>`;
+            return;
           })
           .join(``)}
           </div>
