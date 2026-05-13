@@ -7,7 +7,7 @@
 }
 
 body {
-  background-color: ver(--bg-color);
+  background-color: var(--bg-color);
   color: var(--text-primary);
   font-family: "Courier New", Courier, monospace;
   display: flex;
@@ -139,7 +139,7 @@ button:hover {
 }
 
 .tag-pill {
-  background: rgba (56, 189, 248, 0.1);
+  background: rgba(56, 189, 248, 0.1);
   color: var(--accent);
   border: 1px solid var(--accent);
   padding: 2px 8px;

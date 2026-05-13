@@ -24,6 +24,10 @@ saveBtn.addEventListener("click", () => {
 
     // Get old entries. add new one, and save back to local storage
 
+    document.getElementById("tag-filter").addEventListener("input", (e) => {
+      displayEntries(e.target.value.toLowerCase());
+    });
+
     const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
     entries.unshift({ topic, notes, tags, date }); //Add newst to the top
     localStorage.setItem("rabbitHoles", JSON.stringify(entries));
@@ -45,7 +49,7 @@ document.getElementById("export-btn").addEventListener("click", () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `rabbit-holes-${new Data().toISOString().slice(0, 10)}.json`;
+  a.download = `rabbit-holes-${new Date().toISOString().slice(0, 10)}.json`;
   a.click();
 });
 
@@ -104,9 +108,7 @@ function displayEntries(filter = "") {
             // Visually highlight the matching tag
             const isMatch =
               filter && tag.toLowerCase().includes(filter) ? " match" : "";
-            return;
-            `<span
-          class="tag-pill" ${isMatch}
+            `<span class='tag-pill${isMatch}'
           >${tag}</span>`;
           })
           .join(``)}
