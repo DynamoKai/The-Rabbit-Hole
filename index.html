@@ -6,6 +6,7 @@
     <title>Rabbit Hole Files</title>
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
     <div class="container">
       <header>
@@ -25,16 +26,37 @@
           id="topic"
           placeholder="Topic (e.g., Dyson Sphere Fascinations)"
         />
-        <!--tags entry-->
+        <!----------------------------- tags entry ----------------------------------------->
+        <!----------------------------- tags entry ----------------------------------------->
         <input
           type="text"
           id="tags"
           placeholder="Tags (comma separated: e.g. physics, stars, artificial intelligence)"
         />
         <textarea id="notes" placeholder="What did you find out?"></textarea>
+
+        <!---------------------------- anecdote section ------------------------------------>
+        <div id="anecdote-sidebar" class="sidebar">
+          <div class="sidebar-header">
+            <h2 id="sidebar-title">Anecdote</h2>
+            <button onclick="closeSidebar()" class="close-btn">✕</button>
+          </div>
+          <div class="sidebar-body">
+            <textarea
+              id="sidebar-content"
+              placeholder="Add more details here..."
+            ></textarea>
+            <button id="save-anecdote-btn" class="util-btn">
+              Save Changes
+            </button>
+          </div>
+        </div>
+        <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
         <div class="button-group">
           <button id="save-btn">Log Entry</button>
-          <!-- Clear All button -->
+          <!-------------------------- Clear All button ------------------------------------>
+          <!-------------------------- Clear All button ------------------------------------>
           <button id="clear-all-btn" class="secondary-btn">Clear All</button>
         </div>
       </section>
@@ -48,7 +70,8 @@
       </section>
 
       <section id="journal-output" class="journal-list">
-        <!--entries will appear here-->
+        <!--------------------------entries will appear here------------------------------->
+        <!--------------------------entries will appear here------------------------------->
       </section>
     </div>
 
