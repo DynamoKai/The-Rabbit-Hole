@@ -99,7 +99,7 @@ function deleteEntry(timestamp) {
   displayEntries();
 }
 
-// DISPLAY LOGIC
+// DISPLAY LOGIC UPDATED with REGEX PARSER
 function displayEntries(filter = "") {
   const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
   const journalOutput = document.getElementById("journal-output");
@@ -134,7 +134,7 @@ function displayEntries(filter = "") {
     document.getElementById("sidebar-overlay").classList.remove("active");
   }
 
-  // Save Edited Anecdote back to LocalStorage
+  // SAVE EDITED ANECDOTE BACK TO LOCALSTORAGE
   document.getElementById("save-anecdote-btn").addEventListener("click", () => {
     const newContent = document.getElementById("sidebar-content").value;
     let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
@@ -157,9 +157,21 @@ function displayEntries(filter = "") {
   closetSidebar();
 });
 
+
   journalOutput.innerHTML = filteredEntries
     .map(
-      (e, i) => `
+      (e) => {
+        // PARSER: This finds [words]{count}and turns it into a clickable span
+        const parsedNotes = e.notes.replace(/\[(.*?)\]\{(.*?)\}/g, (match, phrase, content)
+      => {
+         // Escape content to prevent breaking the HTML string
+         const safeContent = content.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+         return `<span class="anecdote-link" onclick="openAnecdote ('${phrase}',
+         '${safeContent}', ${e.timestamp})">${phrase}</span> `;
+      }
+      );
+
+      return `
     <div class="journal-entry">
       <button class="delete-btn" onclick="deleteEntry(${e.timestamp})">✕ Delete</button>
       <small>${e.date}</small>
@@ -178,6 +190,5 @@ function displayEntries(filter = "") {
       <p>${e.notes}</p>
     </div>
     `,
-    )
-    .join("");
+}).join("");
 }
