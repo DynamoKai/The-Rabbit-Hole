@@ -11,6 +11,8 @@ document.getElementById("tag-filter").addEventListener("input", (e) => {
 window.onload = displayEntries;
 
 let sortNewestFirst = true;
+let activeTimestamp = null;
+let activeAnecdoteKey = null;
 
 // LOGIC FOR PROCESS TAGS AND SAVING
 saveBtn.addEventListener("click", () => {
@@ -114,6 +116,46 @@ function displayEntries(filter = "") {
       ? b.timestamp - a.timestamp
       : a.timestamp - b.timestamp;
   });
+
+  // Sidebar Control Functions
+  function openAnecdote(phrase, content, timestamp) {
+    activeTimestamp = timestamp;
+    activeAnecdoteKey = phrase;
+
+    document.getElementById("sidebar-title").innerText = phrase;
+    document.getElementById("sidebar-content").value = content;
+
+    document.getElementById("anecdote-sidebar").classList.add("active");
+    document.getElementById("sidebar-overlay").classList.add("active");
+  }
+
+  function closeSidebar() {
+    document.getElementById("anecdote-sidebar").classList.remove("active");
+    document.getElementById("sidebar-overlay").classList.remove("active");
+  }
+
+  // Save Edited Anecdote back to LocalStorage
+  document.getElementById("save-anecdote-btn").addEventListener("click", () => {
+    const newContent = document.getElementById("sidebar-content").value;
+    let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
+
+  // Find the specific entry and replace the old anecdote syntax with new content
+  const entryIndex = entries.findInde(e => e.timestamp === activeTimestamp);
+  if (entryIndex !== -1) {
+    const oldSyntax =
+    ` [${activeAnecdoteKey}]{${document.getElementById('sidebar-content').defaultValue}}`;
+    const newSyntax = ` [${activeAnecdoteKey}]{${newContent}}`;
+
+    // This logic replaces the text inside the main notes
+    entries[entryIndex].notes = entries[entryIndex].notes.replaces(/\[(.*?)\]\{(.*?)\}/g, (match, p1, p2)
+  =>{
+    return p1 === activeAnecdoteKey ?  ` [${p1}]{${newContent}}` : match;
+  })};
+
+  localStorage.setItem("rabbitHoles", JSON.stringify(entries));
+  displayEntries();
+  closetSidebar();
+});
 
   journalOutput.innerHTML = filteredEntries
     .map(
