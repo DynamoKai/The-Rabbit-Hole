@@ -99,6 +99,42 @@ function deleteEntry(timestamp) {
   displayEntries();
 }
 
+// Sidebar Control Functions
+  function openAnecdote(phrase, content, timestamp) {
+    activeTimestamp = timestamp;
+    activeAnecdoteKey = phrase;
+
+    document.getElementById("sidebar-title").innerText = phrase;
+    document.getElementById("sidebar-content").value = content;
+
+    document.getElementById("anecdote-sidebar").classList.add("active");
+    document.getElementById("sidebar-overlay").classList.add("active");
+  }
+
+  function closeSidebar() {
+    document.getElementById("anecdote-sidebar").classList.remove("active");
+    document.getElementById("sidebar-overlay").classList.remove("active");
+  }
+
+    // SAVE EDITED ANECDOTE BACK TO LOCALSTORAGE
+  document.getElementById("save-anecdote-btn").addEventListener("click", () => {
+    const newContent = document.getElementById("sidebar-content").value;
+    let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
+
+  // Find the specific entry and replace the old anecdote syntax with new content
+  const entryIndex = entries.findIndex(e => e.timestamp === activeTimestamp);
+  if (entryIndex !== -1) {
+    entries[entryIndex].notes = entries[entryIndex].notes.replaces(/\[(.*?)\]\{(.*?)\}/g,
+      return p1 === activeAnecdoteKey ?  `[${p1}]{${newContent}}` : match;
+  });
+
+
+  localStorage.setItem("rabbitHoles", JSON.stringify(entries));
+  displayEntries(document.getElementById("tag-filter").value.toLowerCase());
+  closetSidebar();
+  }
+});
+
 // DISPLAY LOGIC UPDATED with REGEX PARSER
 function displayEntries(filter = "") {
   const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
@@ -117,47 +153,6 @@ function displayEntries(filter = "") {
       : a.timestamp - b.timestamp;
   });
 
-  // Sidebar Control Functions
-  function openAnecdote(phrase, content, timestamp) {
-    activeTimestamp = timestamp;
-    activeAnecdoteKey = phrase;
-
-    document.getElementById("sidebar-title").innerText = phrase;
-    document.getElementById("sidebar-content").value = content;
-
-    document.getElementById("anecdote-sidebar").classList.add("active");
-    document.getElementById("sidebar-overlay").classList.add("active");
-  }
-
-  function closeSidebar() {
-    document.getElementById("anecdote-sidebar").classList.remove("active");
-    document.getElementById("sidebar-overlay").classList.remove("active");
-  }
-
-  // SAVE EDITED ANECDOTE BACK TO LOCALSTORAGE
-  document.getElementById("save-anecdote-btn").addEventListener("click", () => {
-    const newContent = document.getElementById("sidebar-content").value;
-    let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-
-  // Find the specific entry and replace the old anecdote syntax with new content
-  const entryIndex = entries.findInde(e => e.timestamp === activeTimestamp);
-  if (entryIndex !== -1) {
-    const oldSyntax =
-    ` [${activeAnecdoteKey}]{${document.getElementById('sidebar-content').defaultValue}}`;
-    const newSyntax = ` [${activeAnecdoteKey}]{${newContent}}`;
-
-    // This logic replaces the text inside the main notes
-    entries[entryIndex].notes = entries[entryIndex].notes.replaces(/\[(.*?)\]\{(.*?)\}/g, (match, p1, p2)
-  =>{
-    return p1 === activeAnecdoteKey ?  ` [${p1}]{${newContent}}` : match;
-  })};
-
-  localStorage.setItem("rabbitHoles", JSON.stringify(entries));
-  displayEntries();
-  closetSidebar();
-});
-
-
   journalOutput.innerHTML = filteredEntries
     .map(
       (e) => {
@@ -168,8 +163,7 @@ function displayEntries(filter = "") {
          const safeContent = content.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
          return `<span class="anecdote-link" onclick="openAnecdote ('${phrase}',
          '${safeContent}', ${e.timestamp})">${phrase}</span> `;
-      }
-      );
+      });
 
       return `
     <div class="journal-entry">
@@ -187,8 +181,8 @@ function displayEntries(filter = "") {
           })
           .join("")}
           </div>
-      <p>${e.notes}</p>
+      <p>${parsedNotes}</p>
     </div>
-    `,
+    `;
 }).join("");
 }
