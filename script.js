@@ -46,7 +46,7 @@ saveBtn.addEventListener("click", () => {
 });
 
 // SORT BUTTON LOGIC
-(document.getElementById("sort-btn").addEventListener("click"),
+document.getElementById("sort-btn").addEventListener("click",
   (e) => {
     sortNewestFirst = !sortNewestFirst;
     e.target.innerText = sortNewestFirst
@@ -124,15 +124,15 @@ function deleteEntry(timestamp) {
   // Find the specific entry and replace the old anecdote syntax with new content
   const entryIndex = entries.findIndex(e => e.timestamp === activeTimestamp);
   if (entryIndex !== -1) {
-    entries[entryIndex].notes = entries[entryIndex].notes.replaces(/\[(.*?)\]\{(.*?)\}/g,
+    entries[entryIndex].notes = entries[entryIndex].notes.replace(/\[(.*?)\]\{(.*?)\}/g,
       (match, p1, p2) => {
-      return p1 === activeAnecdoteKey ?  `[${p1}]{${newContent}}` : match;
+      return p1 === activeAnecdoteKey ? `[${p1}]{${newContent}}` : match;
   });
 
 
   localStorage.setItem("rabbitHoles", JSON.stringify(entries));
   displayEntries(document.getElementById("tag-filter").value.toLowerCase());
-  closetSidebar();
+  closeSidebar();
   }
 });
 
@@ -162,7 +162,7 @@ function displayEntries(filter = "") {
       => {
          // Escape content to prevent breaking the HTML string
          const safeContent = content.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-         return `<span class="anecdote-link" onclick="openAnecdote ('${phrase}',
+         return `<span class="anecdote-link" onclick="openAnecdote('${phrase}',
          '${safeContent}', ${e.timestamp})">${phrase}</span>`;
       });
 
