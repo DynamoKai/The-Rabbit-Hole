@@ -125,6 +125,7 @@ function deleteEntry(timestamp) {
   const entryIndex = entries.findIndex(e => e.timestamp === activeTimestamp);
   if (entryIndex !== -1) {
     entries[entryIndex].notes = entries[entryIndex].notes.replaces(/\[(.*?)\]\{(.*?)\}/g,
+      (match, p1, p2) => {
       return p1 === activeAnecdoteKey ?  `[${p1}]{${newContent}}` : match;
   });
 
@@ -162,7 +163,7 @@ function displayEntries(filter = "") {
          // Escape content to prevent breaking the HTML string
          const safeContent = content.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
          return `<span class="anecdote-link" onclick="openAnecdote ('${phrase}',
-         '${safeContent}', ${e.timestamp})">${phrase}</span> `;
+         '${safeContent}', ${e.timestamp})">${phrase}</span>`;
       });
 
       return `
@@ -184,5 +185,6 @@ function displayEntries(filter = "") {
       <p>${parsedNotes}</p>
     </div>
     `;
-}).join("");
+})
+.join("");
 }
