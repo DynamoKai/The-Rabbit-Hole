@@ -46,14 +46,13 @@ saveBtn.addEventListener("click", () => {
 });
 
 // SORT BUTTON LOGIC
-document.getElementById("sort-btn").addEventListener("click",
-  (e) => {
-    sortNewestFirst = !sortNewestFirst;
-    e.target.innerText = sortNewestFirst
-      ? "Sort: Newest First"
-      : "Sort: Oldest First";
-    displayEntries(document.getElementById("tag-filter").value.toLowerCase());
-  });
+document.getElementById("sort-btn").addEventListener("click", (e) => {
+  sortNewestFirst = !sortNewestFirst;
+  e.target.innerText = sortNewestFirst
+    ? "Sort: Newest First"
+    : "Sort: Oldest First";
+  displayEntries(document.getElementById("tag-filter").value.toLowerCase());
+});
 
 // EXPORT TO JSON FILE
 document.getElementById("export-btn").addEventListener("click", () => {
@@ -100,39 +99,40 @@ function deleteEntry(timestamp) {
 }
 
 // Sidebar Control Functions
-  function openAnecdote(phrase, content, timestamp) {
-    activeTimestamp = timestamp;
-    activeAnecdoteKey = phrase;
+function openAnecdote(phrase, content, timestamp) {
+  activeTimestamp = timestamp;
+  activeAnecdoteKey = phrase;
 
-    document.getElementById("sidebar-title").innerText = phrase;
-    document.getElementById("sidebar-content").value = content;
+  document.getElementById("sidebar-title").innerText = phrase;
+  document.getElementById("sidebar-content").value = content;
 
-    document.getElementById("anecdote-sidebar").classList.add("active");
-    document.getElementById("sidebar-overlay").classList.add("active");
-  }
+  document.getElementById("anecdote-sidebar").classList.add("active");
+  document.getElementById("sidebar-overlay").classList.add("active");
+}
 
-  function closeSidebar() {
-    document.getElementById("anecdote-sidebar").classList.remove("active");
-    document.getElementById("sidebar-overlay").classList.remove("active");
-  }
+function closeSidebar() {
+  document.getElementById("anecdote-sidebar").classList.remove("active");
+  document.getElementById("sidebar-overlay").classList.remove("active");
+}
 
-    // SAVE EDITED ANECDOTE BACK TO LOCALSTORAGE
-  document.getElementById("save-anecdote-btn").addEventListener("click", () => {
-    const newContent = document.getElementById("sidebar-content").value;
-    let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
+// SAVE EDITED ANECDOTE BACK TO LOCALSTORAGE
+document.getElementById("save-anecdote-btn").addEventListener("click", () => {
+  const newContent = document.getElementById("sidebar-content").value;
+  let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
 
   // Find the specific entry and replace the old anecdote syntax with new content
-  const entryIndex = entries.findIndex(e => e.timestamp === activeTimestamp);
+  const entryIndex = entries.findIndex((e) => e.timestamp === activeTimestamp);
   if (entryIndex !== -1) {
-    entries[entryIndex].notes = entries[entryIndex].notes.replace(/\[(.*?)\]\{(.*?)\}/g,
+    entries[entryIndex].notes = entries[entryIndex].notes.replace(
+      /\[(.*?)\]\{(.*?)\}/g,
       (match, p1, p2) => {
-      return p1 === activeAnecdoteKey ? `[${p1}]{${newContent}}` : match;
-  });
+        return p1 === activeAnecdoteKey ? `[${p1}]{${newContent}}` : match;
+      },
+    );
 
-
-  localStorage.setItem("rabbitHoles", JSON.stringify(entries));
-  displayEntries(document.getElementById("tag-filter").value.toLowerCase());
-  closeSidebar();
+    localStorage.setItem("rabbitHoles", JSON.stringify(entries));
+    displayEntries(document.getElementById("tag-filter").value.toLowerCase());
+    closeSidebar();
   }
 });
 
@@ -155,17 +155,18 @@ function displayEntries(filter = "") {
   });
 
   journalOutput.innerHTML = filteredEntries
-    .map(
-      (e) => {
-        // PARSER: This finds [words]{count}and turns it into a clickable span
-        const parsedNotes = e.notes.replace(/\[(.*?)\]\{(.*?)\}/g, (match, phrase, content)
-      => {
-         // Escape content to prevent breaking the HTML string
-         const safeContent = content.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-         return `<span class="anecdote-link" onclick="openAnecdote('${phrase}',
-         '${safeContent}', ${e.timestamp})">${phrase}</span>`;
-      });
-
+    .map((e) => {
+      // PARSER: This finds [words]{content} and turns it into a clickable span
+      const parsedNotes = e.notes.replace(
+        /\[(.*?)\]\{(.*?)\}/g,
+        (match, phrase, content) => {
+          const safeContent = content
+            .replace(/'/g, "&apos;")
+            .replace(/"/g, "&quot;");
+          // Removed broken space in function signature call
+          return `<span class="anecdote-link" onclick="openAnecdote('${phrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
+        },
+      );
       return `
     <div class="journal-entry">
       <button class="delete-btn" onclick="deleteEntry(${e.timestamp})">✕ Delete</button>
@@ -177,14 +178,13 @@ function displayEntries(filter = "") {
             // Visually highlight the matching tag
             const isMatch =
               filter && tag.toLowerCase().includes(filter) ? " match" : "";
-            return `<span class='tag-pill${isMatch}'
-          >${tag}</span>`;
+            return `<span class='tag-pill${isMatch}'>${tag}</span>`;
           })
           .join("")}
-          </div>
+      </div>
       <p>${parsedNotes}</p>
     </div>
     `;
-})
-.join("");
+    })
+    .join("");
 }
