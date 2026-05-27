@@ -1,9 +1,10 @@
 :root {
-  --bg-color: #0f172a;
-  --card-bg: #1e293b;
-  --text-primary: #f8fafc;
-  --accent: #38f2f843;
-  --border: #334155;
+  --bg-color: #05070a;
+  --card-bg: #0a1017;
+  --text-primary: #a3e635;
+  --accent: #4ade80;
+  --border: #14532d;
+  --glow: rgba(74, 222, 128, 0.25);
 }
 
 body {
@@ -18,7 +19,23 @@ body {
 .container {
   max-width: 900px;
   width: 100%;
-  background-color: #30426b;
+  background-color: #022c22;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 20px rgba(20, 83, 45, 0.2);
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+
+/* Make the inputs look like a terminal */
+input,
+textarea {
+  background: #020617;
+  border: 1px solid var(--border);
+  color: #4ade80;
+  padding: 0.75rem;
+  border-radius: 2px;
+  font-family: inherit;
+  outline: none;
 }
 
 header {
