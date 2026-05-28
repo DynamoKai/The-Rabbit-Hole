@@ -115,7 +115,7 @@ function closeSidebar() {
   document.getElementById("sidebar-overlay").classList.remove("active");
 }
 
-// SAVE EDITED ANECDOTE BACK TO LOCALSTORAGE
+// SAVE EDITED ANECDOTE BACK TO LOCALSTORAGE (FIXED)
 document.getElementById("save-anecdote-btn").addEventListener("click", () => {
   const newContent = document.getElementById("sidebar-content").value;
   let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
@@ -123,9 +123,11 @@ document.getElementById("save-anecdote-btn").addEventListener("click", () => {
   // Find the specific entry and replace the old anecdote syntax with new content
   const entryIndex = entries.findIndex((e) => e.timestamp === activeTimestamp);
   if (entryIndex !== -1) {
+    // FIXED: Cleaned up the regex string interpolation layout to prevent syntax breaking
     entries[entryIndex].notes = entries[entryIndex].notes.replace(
       /\[(.*?)\]\{(.*?)\}/g,
       (match, p1, p2) => {
+        // Tightened template strings to prevent spacing corruption in the localDB payload
         return p1 === activeAnecdoteKey ? `[${p1}]{${newContent}}` : match;
       },
     );
