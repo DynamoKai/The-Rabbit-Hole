@@ -162,9 +162,12 @@ function displayEntries(filter = "") {
         // // Replaced (.*?) with ([\s\S]*?) for the content section to fix saving with whitespace
         /\[(.*?)\]\{([\s\S]*?)\}/g,
         (match, phrase, content) => {
+          // added .replace(/\n/g, "\\n") will prevent breaks from crashing the button(or cursor click)
           const safeContent = content
             .replace(/'/g, "&apos;")
-            .replace(/"/g, "&quot;");
+            .replace(/"/g, "&quot;")
+            .replace(/\n/g, "\\n")
+            .replace(/\r/g, "");
           return `<span class="anecdote-link" onclick="openAnecdote('${phrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
         },
       );
