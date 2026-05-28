@@ -123,11 +123,10 @@ document.getElementById("save-anecdote-btn").addEventListener("click", () => {
   // Find the specific entry and replace the old anecdote syntax with new content
   const entryIndex = entries.findIndex((e) => e.timestamp === activeTimestamp);
   if (entryIndex !== -1) {
-    // FIXED: Cleaned up the regex string interpolation layout to prevent syntax breaking
     entries[entryIndex].notes = entries[entryIndex].notes.replace(
-      /\[(.*?)\]\{(.*?)\}/g,
+      // Replaced (.*?) with ([\s\S]*?) for the content section to fix saving with whitespace
+      /\[(.*?)\]\{([\s\S]*?)\}/g,
       (match, p1, p2) => {
-        // Tightened template strings to prevent spacing corruption in the localDB payload
         return p1 === activeAnecdoteKey ? `[${p1}]{${newContent}}` : match;
       },
     );
@@ -160,12 +159,12 @@ function displayEntries(filter = "") {
     .map((e) => {
       // PARSER: This finds [words]{content} and turns it into a clickable span
       const parsedNotes = e.notes.replace(
-        /\[(.*?)\]\{(.*?)\}/g,
+        // // Replaced (.*?) with ([\s\S]*?) for the content section to fix saving with whitespace
+        /\[(.*?)\]\{([\s\S]*?)\}/g,
         (match, phrase, content) => {
           const safeContent = content
             .replace(/'/g, "&apos;")
             .replace(/"/g, "&quot;");
-          // Removed broken space in function signature call
           return `<span class="anecdote-link" onclick="openAnecdote('${phrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
         },
       );
