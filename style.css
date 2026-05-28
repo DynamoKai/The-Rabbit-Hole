@@ -1,9 +1,9 @@
 :root {
-  --bg-color: #05070a;
+  --bg-color: #05070a; /* Pitch black obsidian */
   --card-bg: #0a1017;
-  --text-primary: #a3e635;
-  --accent: #4ade80;
-  --border: #14532d;
+  --text-primary: #a3e635; /* The classic terminal lime/phosphor green */
+  --accent: #4ade80; /* Glowing neon green for headers & active links */
+  --border: #14532d; /* Matrix-style dark green border */
   --glow: rgba(74, 222, 128, 0.25);
 }
 
@@ -38,6 +38,12 @@ textarea {
   outline: none;
 }
 
+input:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 8px var(--glow);
+}
+
 header {
   text-align: center;
   margin-bottom: 2rem;
@@ -58,25 +64,16 @@ h1 {
   border: 2px solid var(--border);
 }
 
-input,
-textarea {
-  background: #0f172a;
-  border: 1px solid var(--border);
-  color: white;
-  padding: 0.75rem;
-  border-radius: 4px;
-  font-family: inherit;
-}
-
 button {
-  background: var(--accent);
-  color: #0f172a;
-  border: none;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
   padding: 0.75rem;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 4px;
-  transition: opacity 0.2s;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 button:hover {
