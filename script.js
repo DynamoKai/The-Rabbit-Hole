@@ -19,6 +19,7 @@ saveBtn.addEventListener("click", () => {
   const topic = document.getElementById("topic").value;
   const notes = document.getElementById("notes").value;
   const tagsRaw = document.getElementById("tags").value;
+  const depth = document.getElementById("depth").value; // Capture depth
   const date = new Date().toLocaleDateString();
   const timestamp = Date.now(); // for accurate sorting
 
@@ -34,7 +35,7 @@ saveBtn.addEventListener("click", () => {
     const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
 
     // Added timestamp for record
-    entries.unshift({ topic, notes, tags, date, timestamp });
+    entries.unshift({ topic, notes, tags, date, timestamp, depth });
     localStorage.setItem("rabbitHoles", JSON.stringify(entries));
 
     displayEntries();
@@ -42,6 +43,8 @@ saveBtn.addEventListener("click", () => {
     document.getElementById("topic").value = "";
     document.getElementById("notes").value = "";
     document.getElementById("tags").value = "";
+    document.getElementById("depth").value = "1"; //RESET SLIDER
+    document.getElementById("depth-display").innerText = "1";
   }
 });
 
@@ -171,10 +174,17 @@ function displayEntries(filter = "") {
           return `<span class="anecdote-link" onclick="openAnecdote('${phrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
         },
       );
+
+      // DEPTH INDICATOR CALCULATION
+      // THE `|| 1` ensures it defaults to 1 hole if old entries don't have a depth saved.
+      const depthIndicator = "🕳️".repeat(e.depth || 1);
+
+      // RETURN SETTING UPDATE
       return `
     <div class="journal-entry">
       <button class="delete-btn" onclick="deleteEntry(${e.timestamp})">✕ Delete</button>
-      <small>${e.date}</small>
+      <small>${e.date} | DESCENT: ${depthIndicator}</small>
+
       <h3>${e.topic}</h3>
       <div class="tag-container">
         ${e.tags
