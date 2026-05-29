@@ -172,10 +172,12 @@ function displayEntries(filter = "") {
             .replace(/'/g, "&apos;")
             .replace(/"/g, "&quot;")
             .replace(/\{/g, "&#123;")
-            .replace(/\n/g, "&#125;")
+            .replace(/\}/g, "&#125;") // FIXED bracket targeting
             .replace(/\n/g, "\\n")
             .replace(/\r/g, "");
-          return `<span class="anecdote-link" onclick="openAnecdote('${phrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
+
+          // FIXED: Now passing safePhrase into the onclick function!
+          return `<span class="anecdote-link" onclick="openAnecdote('${safePhrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
         })
         // The Second Pass: Cheshire Encryption
         .replace(
