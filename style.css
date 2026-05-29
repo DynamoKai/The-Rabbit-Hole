@@ -349,3 +349,22 @@ button:hover {
   box-shadow: none;
   text-shadow: 0 0 10px var(--accent);
 }
+
+/* Cheshire Cat Encryption */
+.cheshire-text {
+  color: transparent;
+  text-shadow: 0 0 12px var(--accent);
+  background: rgba(192, 132, 252, 0.1);
+  padding: 0 5px;
+  border-radius: 3px;
+  cursor: crosshair;
+  transition: all 0.5s ease-in-out;
+  user-select: none; /*prevents accidental copying while hidden */
+}
+
+.cheshire-text:hover {
+  color: var(--text-primary);
+  text-shadow: 0 0 2px var(--text-primary);
+  background: transparent;
+  user-select: auto;
+}

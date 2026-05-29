@@ -161,19 +161,25 @@ function displayEntries(filter = "") {
   journalOutput.innerHTML = filteredEntries
     .map((e) => {
       // PARSER: This finds [words]{content} and turns it into a clickable span
-      const parsedNotes = e.notes.replace(
-        // // Replaced (.*?) with ([\s\S]*?) for the content section to fix saving with whitespace
-        /\[(.*?)\]\{([\s\S]*?)\}/g,
-        (match, phrase, content) => {
-          // added .replace(/\n/g, "\\n") will prevent breaks from crashing the button(or cursor click)
-          const safeContent = content
-            .replace(/'/g, "&apos;")
-            .replace(/"/g, "&quot;")
-            .replace(/\n/g, "\\n")
-            .replace(/\r/g, "");
-          return `<span class="anecdote-link" onclick="openAnecdote('${phrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
-        },
-      );
+      const parsedNotes = e.notes
+        .replace(
+          // // Replaced (.*?) with ([\s\S]*?) for the content section to fix saving with whitespace
+          /\[(.*?)\]\{([\s\S]*?)\}/g,
+          (match, phrase, content) => {
+            // added .replace(/\n/g, "\\n") will prevent breaks from crashing the button(or cursor click)
+            const safeContent = content
+              .replace(/'/g, "&apos;")
+              .replace(/"/g, "&quot;")
+              .replace(/\n/g, "\\n")
+              .replace(/\r/g, "");
+            return `<span class="anecdote-link" onclick="openAnecdote('${phrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
+          },
+        )
+        // The Second Pass: Cheshire Encryption
+        .replace(
+          /\{\{([\s\S]*?)\}\}/g,
+          '<span class="cheshire-text">$1</span>',
+        );
 
       // DEPTH INDICATOR CALCULATION
       // THE `|| 1` ensures it defaults to 1 hole if old entries don't have a depth saved.
