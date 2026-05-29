@@ -63,6 +63,24 @@ h1 {
   text-shadow: 0 0 8px var(--text-primary);
 }
 
+h1::after {
+  content: "_"; /* Unicode for a solid block cursor, use "_" if you want underscore instead \2588 */
+  color: var(--accent);
+  margin-left: 8px;
+  animation: blink 1s step-end infinite;
+  text-shadow: 0 0 8px var(--accent);
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
 header p {
   color: #64748b;
   font-style: italic;
