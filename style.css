@@ -1,8 +1,8 @@
 :root {
   --bg-color: #05070a; /* Pitch black obsidian */
-  --card-bg: #0a1017;
-  --text-primary: #a3e635; /* The classic terminal lime/phosphor green */
-  --accent: #4ade80; /* Glowing neon green for headers & active links */
+  --card-bg: #070d0a;
+  --text-primary: #4ade80; /* The classic terminal lime/phosphor green */
+  --accent: #c084fc; /* Glowing neon green for headers & active links */
   --border: #14532d; /* Matrix-style dark green border */
   --glow: rgba(74, 222, 128, 0.25);
 }
@@ -11,6 +11,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-primary);
   font-family: "Courier New", Courier, monospace;
+  text-shadow: 0 0 2px var(--glow);
   display: flex;
   justify-content: center;
   padding: 2rem;
@@ -29,154 +30,201 @@ body {
 /* Make the inputs look like a terminal */
 input,
 textarea {
-  background: #020617;
+  background: #020402;
   border: 1px solid var(--border);
-  color: #4ade80;
-  padding: 0.75rem;
-  border-radius: 2px;
+  border-left: 4px solid var(--border); /*   Drawer edge look  */
+  color: var(--text-primary);
+  padding: 0.85rem;
+  /* border-radius: 2px;   MIGHT NOT NEED THIS */
   font-family: inherit;
   outline: none;
+  transition: all 0.3s;
 }
 
 input:focus,
 textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 8px var(--glow);
+  border-left-color: var(--accent);
+  box-shadow: 0 0 10px rgba(192, 132, 252, 0.2);
+  /* box-shadow: 0 0 8px var(--glow); previous box shadow */
 }
 
 header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 2px dashed var(--border);
+  padding-bottom: 1.5rem;
 }
 
 h1 {
-  color: var(--accent);
-  letter-spacing: -1px;
+  color: var(--text-primary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px var(--text-primary);
 }
 
+header p {
+  color: #64748b;
+  font-style: italic;
+
+  /* Data Entry Cabinet */
+}
 .entry-form {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
   background: var(--card-bg);
-  padding: 3.5rem;
-  border-radius: 8px;
-  border: 2px solid var(--border);
+  padding: 2.5rem;
+  /* border-radius: 8px; MIGHT NOT NEED THIS */
+  border: 1px solid var(--border);
+  box-shadow: inset 0 0 20px rgba(20, 83, 45, 0.3); /*  INNER DEPTH  */
 }
 
 button {
   background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--accent);
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
   padding: 0.75rem;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 2px;
+  /* border-radius: 2px; MAY NOT NEED THIS*/
   text-transform: uppercase;
   letter-spacing: 1px;
+  transition: all 0.2s;
 }
 
 button:hover {
-  opacity: 0.9;
+  background: var(--text-primary);
+  color: var(--bg-color);
+  box-shadow: 0 0 15px var(--glow);
 }
 
+/* DEPTH SLIDER STYLING */
+.depth-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.depth-selector label {
+  color: #64748b;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+#depth {
+  accent-color: var(--accent);
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+/*            RENDERED JOURNAL ENTRIES (THE ARCHIVES)          */
 .journal-entry {
   background: var(--card-bg);
-  padding: 1rem;
-  margin-top: 1rem;
-  border-left: 4px solid var(--accent);
-  border-radius: 4px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  position: relative;
+  /* border-radius: 4px; LEAVING THIS OUT FOR NOW */
 }
 
 .journal-entry h3 {
-  margin-top: 0;
-  color: var(--accent);
+  margin-top: 0.5rem 0;
+  color: var(--text-primary);
 }
 
 .journal-entry small {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .button-group {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-top: 1rem;
 }
 
 .secondary-btn {
-  background: transparent;
   color: #ef4444;
+  border-color: #ef4444;
 }
 
 .secondary-btn:hover {
   background: #ef4444;
-  color: #0f172a;
+  color: var(--bg-color);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
 }
 
 /*Style for the individual delete button */
 .delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   background: none;
   border: none;
   color: #64748b;
-  cursor: pointer;
   font-size: 0.8rem;
-  float: right;
 }
 
 .delete-btn:hover {
+  background: none;
   color: #ef4444;
+  box-shadow: none;
+  text-shadow: 0 0 5px #ef4444;
 }
 
 /* Style for the Utility Buttons (Tops) */
 .file-controls {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 1rem;
+  gap: 15px;
+  /* margin-bottom: 1rem; MIGHT NOT USE THIS */
 }
 
 .util-btn {
-  background: #334155;
+  /* background: #334155;
   color: #94a3b8;
   border: none;
-  padding: 5px 10px;
-  font-size: 0.7rem;
-  cursor: pointer;
-  border-radius: 4px;
+  cursor: pointer; MIGHT DELETE THIS LATER*/
+  padding: 5px 15px;
+  font-size: 0.75rem;
+  border-radius: dashed;
 }
 
 /* Tag Pill Style */
 .tag-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  margin: 8px 0;
+  gap: 8px;
+  margin: 12px 0;
 }
 
 .tag-pill {
-  background: rgba(56, 189, 248, 0.1);
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  padding: 2px 8px;
-  border-radius: 12px;
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #64748b;
+  padding: 2px 10px;
+  /* border-radius: 12px; MIGHT */
   font-size: 0.7rem;
-  text-transform: uppercase;
+  text-transform: lowercase;
 }
 
 .filter-section {
-  margin: 2rem 0 1rem 0;
+  margin: 3rem 0 1.5rem 0;
 }
 
 #tag-filter {
   width: 100%;
-  padding: 0.75rem;
   background: transparent;
   border: none;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px dashed var(--border);
   color: var(--accent);
   font-style: italic;
-  outline: none;
+  /* outline: none;
   transition: border-color 0.3s;
+  padding: 0.75rem; MIGHT */
 }
 
 #tag-filter:focus {
@@ -186,35 +234,39 @@ button:hover {
 /* This highlights tags that match the filter */
 .tag-pill.match {
   background: var(--accent);
-  color: #0f172a;
+  color: var(--bg-color);
+  border-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
 }
 
-/* Anecdote "Hyperlink" Style */
+/*         Anecdote "Curiosity" Style         */
 .anecdote-link {
-  color: #38bdf8;
-  text-decoration: underline dashed;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
   cursor: help;
-  transition: color 0.2s;
+  transition: all 0.2s;
+  text-shadow: 0 0 5px rgba(192, 132, 252, 0.5);
 }
 
 .anecdote-link:hover {
-  color: white;
-  background: rgba(56, 189, 248, 0.1);
+  color: #ffffff;
+  background: rgba(192, 132, 252, 0.15);
 }
 
 /* Sidebar Styling */
 .sidebar {
   position: fixed;
   top: 0;
-  right: -400px; /* hidden */
-  width: 350px;
+  right: -450px; /* hidden */
+  width: 400px;
   height: 100%;
-  background: var(--card-bg);
-  border-left: 2px solid var(--border);
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+  background: #040806;
+  border-left: 2px solid var(--accent);
+  box-shadow: -10px 0 30px rgba(192, 132, 252, 0.15);
   z-index: 1000;
-  transition: right 0.3s ease;
-  padding: 2rem;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 2.5rem;
   display: flex;
   flex-direction: column;
 }
@@ -227,14 +279,28 @@ button:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px dashed var(--accent);
+  padding-bottom: 1rem;
+}
+
+#sidebar-title {
+  color: var(--accent);
+  margin: 0;
+  font-size: 1.2rem;
+  text-transform: uppercase;
 }
 
 #sidebar-content {
+  flex-grow: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  resize: none;
+  line-height: 1.6;
   width: 100%;
   height: 300px;
   margin-bottom: 1rem;
-  background: var(--bg-color);
 }
 
 /* Overlay that dims background */
@@ -244,7 +310,8 @@ button:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(2px);
   display: none;
   z-index: 999;
 }
@@ -254,9 +321,13 @@ button:hover {
 }
 
 .close-btn {
-  background: none;
   border: none;
-  color: var(--text-primary);
   font-size: 1.5rem;
-  cursor: pointer;
+}
+
+.close-btn:hover {
+  background: transparent;
+  color: var(--accent);
+  box-shadow: none;
+  text-shadow: 0 0 10px var(--accent);
 }
