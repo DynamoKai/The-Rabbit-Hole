@@ -33,6 +33,25 @@
           id="tags"
           placeholder="Tags (comma separated: e.g. physics, stars, artificial intelligence)"
         />
+
+        <div class="depth-selector">
+          <label for="depth">DEPTH LEVEL</label>
+          <input
+            type="range"
+            id="depth"
+            min="1"
+            max="5"
+            value="1"
+            oninput="
+              document.getElementById('depth-display').innerText = this.value
+            "
+          />
+          <span
+            id="depth-display"
+            style="color: var(--accent); font-weight: bold"
+            >1</span
+          >
+        </div>
         <textarea id="notes" placeholder="What did you find out?"></textarea>
 
         <!---------------------------- anecdote section ------------------------------------>
