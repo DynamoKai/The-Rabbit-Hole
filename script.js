@@ -13,6 +13,7 @@ window.onload = displayEntries;
 let sortNewestFirst = true;
 let activeTimestamp = null;
 let activeAnecdoteKey = null;
+let activeAnecdoteContent = null; // added to prevent duplicate overwriting and ensure exact matches
 
 // LOGIC FOR PROCESS TAGS AND SAVING
 saveBtn.addEventListener("click", () => {
@@ -105,6 +106,7 @@ function deleteEntry(timestamp) {
 function openAnecdote(phrase, content, timestamp) {
   activeTimestamp = timestamp;
   activeAnecdoteKey = phrase;
+  activeAnecdoteContent = content; // Store exact content to match correctly when saving
 
   document.getElementById("sidebar-title").innerText = phrase;
   document.getElementById("sidebar-content").value = content;
@@ -125,11 +127,22 @@ document.getElementById("save-anecdote-btn").addEventListener("click", () => {
 
   const entryIndex = entries.findIndex((e) => e.timestamp === activeTimestamp);
   if (entryIndex !== -1) {
+    let hasReplaced = false; // Prevents overwriting multiple identical anecdotes
+
     entries[entryIndex].notes = entries[entryIndex].notes.replace(
-      // UPGRADED REGEX: Safely ignores {{...}} blocks when looking for the closing }
       /\[(.*?)\]\{((?:[^{}]|\{\{[\s\S]*?\}\})*)\}/g,
       (match, p1, p2) => {
-        return p1 === activeAnecdoteKey ? `[${p1}]{${newContent}}` : match;
+        // Now checks BOTH phrase and exact content to prevent saving issues
+        if (
+          !hasReplaced &&
+          p1 === activeAnecdoteKey &&
+          p2 === activeAnecdoteContent
+        ) {
+          hasReplaced = true;
+          activeAnecdoteContent = newContent; // Update so you can click save multiple times in a row
+          return `[${p1}]{${newContent}}`;
+        }
+        return match;
       },
     );
 
@@ -159,18 +172,23 @@ function displayEntries(filter = "") {
 
   journalOutput.innerHTML = filteredEntries
     .map((e) => {
-      // PARSER: This finds [words]{content} and turns it into a clickable span
       const parsedNotes = e.notes
-        // First Pass: Anecdote Links (UPGRADED REGEX)
         .replace(
           /\[(.*?)\]\{((?:[^{}]|\{\{[\s\S]*?\}\})*)\}/g,
           (match, phrase, content) => {
+            // FIXED ESCAPING: Safe generation for inline JS onclick handlers
             const safePhrase = phrase
-              .replace(/'/g, "&apos;")
-              .replace(/"/g, "&quot;");
-            const safeContent = content
+              .replace(/&/g, "&amp;")
               .replace(/\\/g, "\\\\")
-              .replace(/'/g, "&apos;")
+              .replace(/'/g, "\\'") // Using \' prevents JS syntax errors
+              .replace(/"/g, "&quot;")
+              .replace(/\n/g, "\\n")
+              .replace(/\r/g, "");
+
+            const safeContent = content
+              .replace(/&/g, "&amp;") // Prevents string desync during saving
+              .replace(/\\/g, "\\\\")
+              .replace(/'/g, "\\'") // Using \' prevents JS syntax errors
               .replace(/"/g, "&quot;")
               .replace(/\{/g, "&#123;")
               .replace(/\}/g, "&#125;")
@@ -200,7 +218,6 @@ function displayEntries(filter = "") {
       <div class="tag-container">
         ${e.tags
           .map((tag) => {
-            // Visually highlight the matching tag
             const isMatch =
               filter && tag.toLowerCase().includes(filter) ? " match" : "";
             return `<span class='tag-pill${isMatch}'>${tag}</span>`;
