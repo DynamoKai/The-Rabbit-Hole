@@ -118,17 +118,16 @@ function closeSidebar() {
   document.getElementById("sidebar-overlay").classList.remove("active");
 }
 
-// SAVE EDITED ANECDOTE BACK TO LOCALSTORAGE (FIXED)
+// SAVE EDITED ANECDOTE BACK TO LOCALSTORAGE
 document.getElementById("save-anecdote-btn").addEventListener("click", () => {
   const newContent = document.getElementById("sidebar-content").value;
   let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
 
-  // Find the specific entry and replace the old anecdote syntax with new content
   const entryIndex = entries.findIndex((e) => e.timestamp === activeTimestamp);
   if (entryIndex !== -1) {
     entries[entryIndex].notes = entries[entryIndex].notes.replace(
-      // Replaced (.*?) with ([\s\S]*?) for the content section to fix saving with whitespace
-      /\[(.*?)\]\{([\s\S]*?)\}/g,
+      // UPGRADED REGEX: Safely ignores {{...}} blocks when looking for the closing }
+      /\[(.*?)\]\{((?:[^{}]|\{\{[\s\S]*?\}\})*)\}/g,
       (match, p1, p2) => {
         return p1 === activeAnecdoteKey ? `[${p1}]{${newContent}}` : match;
       },
@@ -162,23 +161,25 @@ function displayEntries(filter = "") {
     .map((e) => {
       // PARSER: This finds [words]{content} and turns it into a clickable span
       const parsedNotes = e.notes
-        // First Pass: Anecdote Links
-        .replace(/\[(.*?)\]\{([\s\S]*?)\}/g, (match, phrase, content) => {
-          const safePhrase = phrase
-            .replace(/'/g, "&apos;")
-            .replace(/"/g, "&quot;");
-          const safeContent = content
-            .replace(/\\/g, "\\\\")
-            .replace(/'/g, "&apos;")
-            .replace(/"/g, "&quot;")
-            .replace(/\{/g, "&#123;")
-            .replace(/\}/g, "&#125;") // FIXED bracket targeting
-            .replace(/\n/g, "\\n")
-            .replace(/\r/g, "");
+        // First Pass: Anecdote Links (UPGRADED REGEX)
+        .replace(
+          /\[(.*?)\]\{((?:[^{}]|\{\{[\s\S]*?\}\})*)\}/g,
+          (match, phrase, content) => {
+            const safePhrase = phrase
+              .replace(/'/g, "&apos;")
+              .replace(/"/g, "&quot;");
+            const safeContent = content
+              .replace(/\\/g, "\\\\")
+              .replace(/'/g, "&apos;")
+              .replace(/"/g, "&quot;")
+              .replace(/\{/g, "&#123;")
+              .replace(/\}/g, "&#125;")
+              .replace(/\n/g, "\\n")
+              .replace(/\r/g, "");
 
-          // FIXED: Now passing safePhrase into the onclick function!
-          return `<span class="anecdote-link" onclick="openAnecdote('${safePhrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
-        })
+            return `<span class="anecdote-link" onclick="openAnecdote('${safePhrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
+          },
+        )
         // The Second Pass: Cheshire Encryption
         .replace(
           /\{\{([\s\S]*?)\}\}/g,
