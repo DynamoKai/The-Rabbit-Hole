@@ -6,12 +6,12 @@ const importInput = document.getElementById("import-input");
 // Load existing entries from LocalStorage on startup
 document.getElementById("tag-filter").addEventListener("input", (e) => {
   const searchTerm =
-    document.getElementById("curiousitySearch")?.value.toLowerCase() || "";
+    document.getElementById("curiositySearch")?.value.toLowerCase() || "";
   displayEntries(e.target.value.toLowerCase(), searchTerm);
 });
 
 // The Global Terminal Search Listener
-document.getElementById("curiousitySearch")?.addEventListener("input", (e) => {
+document.getElementById("curiositySearch")?.addEventListener("input", (e) => {
   const tagFilter = document.getElementById("tag-filter").value.toLowerCase();
   displayEntries(tagFilter, e.target.value.toLowerCase());
 });
@@ -258,7 +258,7 @@ function displayEntries(filter = "", searchQuery = "") {
             const isMatch =
               filter && tag.toLowerCase().includes(filter) ? " match" : "";
             const displayTag = highlightText(tag, searchQuery);
-            return `<span class='tag-pill${isMatch}'>${displayTagtag}</span>`;
+            return `<span class='tag-pill${isMatch}'>${displayTag}</span>`;
           })
           .join("")}
       </div>
