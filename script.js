@@ -5,35 +5,18 @@ const importInput = document.getElementById("import-input");
 
 // Load existing entries from LocalStorage on startup
 document.getElementById("tag-filter").addEventListener("input", (e) => {
-  displayEntries(e.target.value.toLowerCase());
+  const searchTerm =
+    document.getElementById("curiousitySearch")?.value.toLowerCase() || "";
+  displayEntries(e.target.value.toLowerCase(), searchTerm);
 });
 
-// Wait for the DOM to fully load
-document.addEventListener("DOMContentLoaded", () => {
-  const searchInput = document.getElementById("curiositySearch");
-
-  // Listen for text input
-  searchInput.addEventListener("input", function (e) {
-    const query = e.target.value.toLowerCase();
-
-    // Select all your entries (Update '.journal-entry' to match your actual class)
-    const entries = document.querySelectorAll(".journal-entry");
-
-    entries.forEach((entry) => {
-      // Get the text content of the entry
-      const text = entry.textContent.toLowerCase();
-
-      // If the query matches the text, show it. Otherwise, hide it.
-      if (text.includes(query)) {
-        entry.style.display = ""; // Resets to default display
-      } else {
-        entry.style.display = "none"; // Hides the element
-      }
-    });
-  });
+// The Global Terminal Search Listener
+document.getElementById("curiousitySearch")?.addEventListener("input", (e) => {
+  const tagFilter = document.getElementById("tag-filter").value.toLowerCase();
+  displayEntries(tagFilter, e.target.value.toLowerCase());
 });
 
-window.onload = displayEntries;
+window.onload = () => displayEntries();
 
 let sortNewestFirst = true;
 let activeTimestamp = null;
@@ -178,14 +161,26 @@ document.getElementById("save-anecdote-btn").addEventListener("click", () => {
 });
 
 // DISPLAY LOGIC UPDATED with REGEX PARSER
-function displayEntries(filter = "") {
+function displayEntries(filter = "", searchQuery = "") {
   const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
   const journalOutput = document.getElementById("journal-output");
 
   // The filter logic should check if any tag in the entry includes the search term
   let filteredEntries = entries.filter((entry) => {
-    if (!filter) return true; // Show all if filter is empty
-    return entry.tags.some((tag) => tag.toLowerCase().includes(filter));
+    // 1. Check if it matches the specific tag filter
+    const matchesTag =
+      !filter || entry.tags.some((tag) => tag.toLowerCase().includes(filter));
+    // if (!filter) return true; // Show all if filter is empty
+    // return entry.tags.some((tag) => tag.toLowerCase().includes(filter)); MIGHT
+
+    // 2. check if it matches the global terminal search
+    const matchesSearch =
+      !searchQuery ||
+      entry.topic.toLowerCase().includes(searchQuery) ||
+      entry.notes.toLowerCase().includes(searchQuery) ||
+      entry.tags.some((tag) => tag.toLowerCase().includes(searchQuery));
+
+    return matchesTag && matchesSearch;
   });
 
   // SORT
