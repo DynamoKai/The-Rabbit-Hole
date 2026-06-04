@@ -160,6 +160,18 @@ document.getElementById("save-anecdote-btn").addEventListener("click", () => {
   }
 });
 
+// HELPER FUNCTION TO HIGHLIGHT TEXT
+function highlightText(text, query) {
+  // If there's no search query, return the normal text
+  if (!query) return text;
+
+  // Create a regex that finds the query (case-insensitive)
+  const regex = new RegExp(` (${query})`, "gi");
+
+  // Replace the matched text with the highlighted span
+  return text.replace(regex, '<span class="search-highlight">$1</span>');
+}
+
 // DISPLAY LOGIC UPDATED with REGEX PARSER
 function displayEntries(filter = "", searchQuery = "") {
   const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
@@ -192,6 +204,7 @@ function displayEntries(filter = "", searchQuery = "") {
 
   journalOutput.innerHTML = filteredEntries
     .map((e) => {
+      // spotlight highlight text search
       const parsedNotes = e.notes
         .replace(
           /\[(.*?)\]\{((?:[^{}]|\{\{[\s\S]*?\}\})*)\}/g,
@@ -228,23 +241,28 @@ function displayEntries(filter = "", searchQuery = "") {
       // THE `|| 1` ensures it defaults to 1 hole if old entries don't have a depth saved.
       const depthIndicator = "🕳️".repeat(e.depth || 1);
 
+      // 2. Applied spotligh highlights AFTER parsing
+      const displayTopic = highlightText(e.topic, searchQuery);
+      const displayNotes = highlightText(parsedNotes, searchQuery);
+
       // RETURN SETTING UPDATE
       return `
     <div class="journal-entry">
       <button class="delete-btn" onclick="deleteEntry(${e.timestamp})">✕ Delete</button>
       <small>${e.date} | DESCENT: ${depthIndicator}</small>
 
-      <h3>${e.topic}</h3>
+      <h3>${displayTopic}</h3>
       <div class="tag-container">
         ${e.tags
           .map((tag) => {
             const isMatch =
               filter && tag.toLowerCase().includes(filter) ? " match" : "";
-            return `<span class='tag-pill${isMatch}'>${tag}</span>`;
+            const displayTag = highlightText(tag, searchQuery);
+            return `<span class='tag-pill${isMatch}'>${displayTagtag}</span>`;
           })
           .join("")}
       </div>
-      <p>${parsedNotes}</p>
+      <p>${displayNotes}</p>
     </div>
     `;
     })
