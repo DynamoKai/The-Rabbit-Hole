@@ -8,6 +8,31 @@ document.getElementById("tag-filter").addEventListener("input", (e) => {
   displayEntries(e.target.value.toLowerCase());
 });
 
+// Wait for the DOM to fully load
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById("curiositySearch");
+
+  // Listen for text input
+  searchInput.addEventListener("input", function (e) {
+    const query = e.target.value.toLowerCase();
+
+    // Select all your entries (Update '.journal-entry' to match your actual class)
+    const entries = document.querySelectorAll(".journal-entry");
+
+    entries.forEach((entry) => {
+      // Get the text content of the entry
+      const text = entry.textContent.toLowerCase();
+
+      // If the query matches the text, show it. Otherwise, hide it.
+      if (text.includes(query)) {
+        entry.style.display = ""; // Resets to default display
+      } else {
+        entry.style.display = "none"; // Hides the element
+      }
+    });
+  });
+});
+
 window.onload = displayEntries;
 
 let sortNewestFirst = true;

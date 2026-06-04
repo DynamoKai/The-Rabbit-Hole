@@ -137,6 +137,55 @@ button:hover {
   cursor: pointer;
 }
 
+/* Container for the search terminal */
+.search-console {
+  background-color: #0c0c0c;
+  border: 1px solid #33ff00;
+  padding: 12px;
+  font-family: "Courier New", Courier, monospace;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(51, 255, 0, 0.2);
+  margin-bottom: 20px;
+
+  /* Subtle CRT Flicker */
+  animation: crt-flicker 0.15s infinite alternate;
+}
+
+/* The terminal prompt text */
+.prompt-symbol {
+  color: #33ff00;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+/* The ACTUAL search input field */
+#curiousitySearch {
+  background: transparent;
+  border: none;
+  color: #33ff00;
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  flex-grow: 1;
+}
+
+/* Styling the placeholder text */
+#curiousitySearch::placeholder {
+  color: #1a8000;
+  opacity: 0.7;
+}
+
+/*keyframes for the flicker effect */
+@keyframes crt-flicker {
+  0% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 /*            RENDERED JOURNAL ENTRIES (THE ARCHIVES)          */
 .journal-entry {
   background: var(--card-bg);
