@@ -245,15 +245,58 @@ function displayEntries(filter = "", searchQuery = "") {
       const displayTopic = highlightText(e.topic, searchQuery);
       const displayNotes = highlightText(parsedNotes, searchQuery);
 
+      // TOP TAGS LOGIC
+      function updateTopTags() {
+        const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
+        const tagCounts = {};
+
+        // Loop through all entries and count the tags
+        entries.forEach((entry) => {
+          if (entry.tags && Array.isArray(entry.tags)) {
+            entry.tags.forEach((tag) => {
+              // Normalize tags to prevent duplicates like "Physics" and "physics"
+              const cleanTag = tag.toLowerCase().trim();
+              tagCounts[cleanTag] = (tagCounts[cleanTag] || 0) + 1;
+            });
+          }
+        });
+
+        // Sort by frequency and slice the top 3
+        const top3Tags = Object.keys(tagCounts)
+          .sort((a, b) => tagCounts[b] - tagCounts[a])
+          .slice(0, 3);
+
+        // Render to the container
+        const container = document.getElementById("top-tags-container");
+        if (!container) return; // Safety check
+
+        if (top3Tags.length === 0) {
+          container.innerHTML = ""; // Clear if no tags exist
+          return;
+        }
+
+        // mapping the tags into the HTML and adding click feature to auto search
+        container.innerHTML = top3Tags
+          .map(
+            (tag) =>
+              `<span class="tag-pill top-tag" onclick="
+          const search = document.getElementById('curiositySearch');
+          search.value = '${tag}';
+          search.dispatchEvent(new Event('input'));
+          ">#$ {tag}</span>`,
+          )
+          .join("");
+      }
+
       // RETURN SETTING UPDATE
       return `
     <div class="journal-entry">
       <button class="delete-btn" onclick="deleteEntry(${e.timestamp})">✕ Delete</button>
       <small>${e.date} | DESCENT: ${depthIndicator}</small>
 
-      <h3>${displayTopic}</h3>
       <div class="tag-container">
         ${e.tags
+          .slice(0, 3) // restricts the placement to top 3 tags
           .map((tag) => {
             const isMatch =
               filter && tag.toLowerCase().includes(filter) ? " match" : "";
@@ -262,6 +305,8 @@ function displayEntries(filter = "", searchQuery = "") {
           })
           .join("")}
       </div>
+
+      <h3>${displayTopic}</h3>
       <p>${displayNotes}</p>
     </div>
     `;
