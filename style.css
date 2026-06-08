@@ -285,7 +285,7 @@ button:hover {
 }
 
 /* Individual tag styling */
-.tag-pill {
+.tag-pill.top-tag {
   background-color: #e2e8f0;
   color: #334155;
   padding: 6px 14px;
@@ -293,6 +293,7 @@ button:hover {
   font-size: 14px;
   font-weight: 600;
   text-transform: capitalize;
+  cursor: crosshair;
 }
 
 /* Tag Pill Style */
