@@ -311,7 +311,7 @@ function updateTopTags() {
           const search = document.getElementById('curiositySearch');
           search.value = '${tag}';
           search.dispatchEvent(new Event('input'));
-          ">#$ {tag}</span>`,
+          ">#${tag}</span>`,
     )
     .join("");
 }

@@ -160,7 +160,7 @@ button:hover {
 }
 
 /* The ACTUAL search input field */
-#curiousitySearch {
+#curiositySearch {
   background: transparent;
   border: none;
   color: #33ff00;
@@ -171,7 +171,7 @@ button:hover {
 }
 
 /* Styling the placeholder text */
-#curiousitySearch::placeholder {
+#curiositySearch::placeholder {
   color: #1a8000;
   opacity: 0.2;
 }
