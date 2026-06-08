@@ -20,6 +20,7 @@ window.onload = () => displayEntries();
 
 let sortNewestFirst = true;
 let activeTimestamp = null;
+let editingTimestamp = null;
 let activeAnecdoteKey = null;
 let activeAnecdoteContent = null; // added to prevent duplicate overwriting and ensure exact matches
 
@@ -29,8 +30,8 @@ saveBtn.addEventListener("click", () => {
   const notes = document.getElementById("notes").value;
   const tagsRaw = document.getElementById("tags").value;
   const depth = document.getElementById("depth").value; // Capture depth
-  const date = new Date().toLocaleDateString();
-  const timestamp = Date.now(); // for accurate sorting
+  // const date = new Date().toLocaleDateString();
+  // const timestamp = Date.now(); // for accurate sorting
 
   if (topic && notes) {
     // Convert comma-separated string into a clean array
@@ -41,13 +42,27 @@ saveBtn.addEventListener("click", () => {
       .filter((t) => t !== "");
 
     // Get old entries. add new one, and save back to local storage
-    const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
+    let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
 
-    // Added timestamp for record
-    entries.unshift({ topic, notes, tags, date, timestamp, depth });
-    localStorage.setItem("rabbitHoles", JSON.stringify(entries));
+    if (editingTimestamp) {
+      const index = entries.findIndex((e) => e.timestamp === editingTimestamp);
+      if (index !== -1) {
+        entries[index].topic = topic;
+        entries[index].notes = notes;
+        entries[index].tags = tags;
+        entries[index].depth = depth;
+        // Note: I will keep the original date and timestamp intact
+      }
+      // reset the edit mode
+      editingTimestamp = null;
+      document.getElementById("save-btn").innerText = "Log Entry";
+    } else {
+      // Create a new entry
+      const date = new Date().tolocaleDateString();
+      const timestamp = Date.now();
+      entries.unshift({ topic, notes, tags, date, timestamp, depth });
+    }
 
-    displayEntries();
     // Reset fields
     document.getElementById("topic").value = "";
     document.getElementById("notes").value = "";
@@ -101,6 +116,28 @@ clearAllBtn.addEventListener("click", () => {
     displayEntries();
   }
 });
+
+// EDIT ENTRY LOGIC
+function editEntry(timestamp) {
+  const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
+  const entryToEdit = entries.find((e) => e.timestamp === timestamp);
+
+  if (entryToEdit) {
+    // Populate the form fields with the entry data
+    document.getElementById("topic").value = entryToEdit.topic;
+    document.getElementById("tags").value = entryToEdit.tags.join(", ");
+    document.getElementById("depth").value = entryToEdit.depth || 1;
+    document.getElementById("depth-display").innerText = entryToEdit.depth || 1;
+    document.getElementById("notes").value = entryToEdit.notes;
+
+    // setting the global editing flag and change the button text
+    editingTimestamp = timestamp;
+    document.getElementById("save-btn").innerText = "Update Entry";
+
+    // Scroll user back to the top to see the form
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
 
 // INDIVIDUAL DELETE LOGIC
 function deleteEntry(timestamp) {
@@ -250,7 +287,10 @@ function displayEntries(filter = "", searchQuery = "") {
       // RETURN SETTING UPDATE
       return `
     <div class="journal-entry">
-      <button class="delete-btn" onclick="deleteEntry(${e.timestamp})">✕ Delete</button>
+        <div class="entry-actions">
+          <button class="edit-btn" onclick="editEntry(${e.timestamp})✎ Edit</button>
+          <button class="delete-btn" onclick="deleteEntry(${e.timestamp})">✕ Delete</button>
+          </div>
       <small>${e.date} | DESCENT: ${depthIndicator}</small>
 
       <div class="tag-container">
