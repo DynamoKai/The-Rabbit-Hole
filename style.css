@@ -473,3 +473,37 @@ button:hover {
   background: transparent;
   user-select: auto;
 }
+
+/* ===========================================================================
+========================== MARKDOWN & TEXT FORMATTING ========================
+=========================================================================== */
+
+/* Enter key line breaks honored */
+.journal-entry p {
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+/* Bold text */
+.journal-entry strong {
+  color: #33ff00; /* Bright terminal green babbbbbbbbbyyyyyy */
+  font-weight: 900;
+  text-shadow: 0 0 5px rgba(51, 255, 0, 0.4);
+}
+
+/* Italics text (*text*) */
+.journal-entry em {
+  color: var(--accent); /* Neon purple accent :) */
+  font-style: italic;
+}
+
+/* Blockquotes / Margins (> text */
+.md-quote {
+  border-left: 3px solid var(--accent);
+  margin: 15px;
+  padding: 10px 15px;
+  color: #94a3b8;
+  font-style: italic;
+  background: rgba(192, 132, 252, 0.05);
+  border-radius: 0 4px 4px 0;
+}

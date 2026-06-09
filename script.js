@@ -58,10 +58,13 @@ saveBtn.addEventListener("click", () => {
       document.getElementById("save-btn").innerText = "Log Entry";
     } else {
       // Create a new entry
-      const date = new Date().tolocaleDateString();
+      const date = new Date().toLocaleDateString();
       const timestamp = Date.now();
       entries.unshift({ topic, notes, tags, date, timestamp, depth });
     }
+
+    localStorage.setItem("rabbitHoles", JSON.stringify(entries));
+    displayEntries(document.getElementById("tag-filter").value.toLowerCase());
 
     // Reset fields
     document.getElementById("topic").value = "";
@@ -245,6 +248,16 @@ function displayEntries(filter = "", searchQuery = "") {
     .map((e) => {
       // spotlight highlight text search
       const parsedNotes = e.notes
+        // 1. MARKDOWN: Bold (**text**)
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+
+        // 2. MARKDOWN: Italics (*text*)
+        .replace(/\*(.*?)\*/g, "<em>$1</em>")
+
+        // 3. MARKDOWN: Blockquotes/Margins (> text)
+        .replace(/^>\s?(.*$)/gm, '<blockquote class="md-quote">$1</blockquote>')
+
+        // 4. ANECDOTES
         .replace(
           /\[(.*?)\]\{((?:[^{}]|\{\{[\s\S]*?\}\})*)\}/g,
           (match, phrase, content) => {
@@ -288,7 +301,7 @@ function displayEntries(filter = "", searchQuery = "") {
       return `
     <div class="journal-entry">
         <div class="entry-actions">
-          <button class="edit-btn" onclick="editEntry(${e.timestamp})✎ Edit</button>
+          <button class="edit-btn" onclick="editEntry(${e.timestamp})">✎ Edit</button>
           <button class="delete-btn" onclick="deleteEntry(${e.timestamp})">✕ Delete</button>
           </div>
       <small>${e.date} | DESCENT: ${depthIndicator}</small>
