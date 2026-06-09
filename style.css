@@ -394,6 +394,42 @@ button:hover {
   flex-direction: column;
 }
 
+/* The White Rabbit */
+.crt-image-container {
+  position: relative;
+  width: 300px;
+  margin: 0 auto 1.5rem auto; /* centers the image */
+  border: 1px solid var(--border);
+  box-shadow: 0 0 15px var(--glow);
+}
+
+.crt-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* grayscale strips color....Sepia + Hue Rotate forces it to neon green */
+  filter: grayscale(100%) sepia(100%) hue-rotate(80deg) saturate(100%)
+    contrast(1.2);
+}
+
+/* The  Scanline Effect */
+.crt-image-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(5, 7, 10, 0.4) 3px,
+    rgba(5, 7, 10, 0.4) 4px
+  );
+  pointer-events: none; /* allows you to click through overlay */
+}
+
 .sidebar.active {
   right: 0;
 }
