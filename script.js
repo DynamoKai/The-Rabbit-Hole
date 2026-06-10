@@ -16,13 +16,50 @@ document.getElementById("curiositySearch")?.addEventListener("input", (e) => {
   displayEntries(tagFilter, e.target.value.toLowerCase());
 });
 
-window.onload = () => displayEntries();
+window.onload = () => {
+  displayEntries();
+  loadDraft();
+};
 
 let sortNewestFirst = true;
 let activeTimestamp = null;
 let editingTimestamp = null;
 let activeAnecdoteKey = null;
 let activeAnecdoteContent = null; // added to prevent duplicate overwriting and ensure exact matches
+
+// =================================AUTO-SAVE LOGIC====================================
+
+function saveDraft() {
+  if (!editingTimestamp) {
+    const draft = {
+      topic: document.getElementById("topic").value,
+      tags: document.getElementById("tags").value,
+      depth: document.getElementById("depth").value,
+      notes: document.getElementById("notes").value,
+    };
+    localStorage.setItem("rabbitHoleDraft", JSON.stringify(draft));
+  }
+}
+
+function loadDraft() {
+  const draftData = localStorage.getItem("rabbitHoleDraft");
+  if (draftData) {
+    const draft = JSON.parse(draftData);
+    document.getElementById("topic").value = draft.topic || "";
+    document.getElementById("tags").value = draft.tags || "";
+
+    if (draft.depth) {
+      document.getElementById("depth").value = draft.depth;
+      document.getElementById("depth-display").innerText = draft.depth;
+    }
+    document.getElementById("notes").value = draft.notes || "";
+  }
+}
+
+// Attach the saveDraft function to listen for every keystrokes of slider movement
+["topic", "tags", "notes", "depth"].forEach((id) => {
+  document.getElementById(id).addEventListener("input", saveDraft);
+});
 
 // LOGIC FOR PROCESS TAGS AND SAVING
 saveBtn.addEventListener("click", () => {
@@ -65,6 +102,9 @@ saveBtn.addEventListener("click", () => {
 
     localStorage.setItem("rabbitHoles", JSON.stringify(entries));
     displayEntries(document.getElementById("tag-filter").value.toLowerCase());
+
+    // CLEAR THE TEMP DRAFT ON SUCCESSFUL SAVE
+    localStorage.removeItem("rabbitHoleDraft");
 
     // Reset fields
     document.getElementById("topic").value = "";
