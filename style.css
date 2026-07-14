@@ -601,3 +601,13 @@ button:hover {
   background: rgba(192, 132, 252, 0.05);
   border-radius: 0 4px 4px 0;
 }
+
+.hidden {
+  display: none !important;
+}
+
+/*ENSURES THE MAIN APP TAKES FULL HEIGHT WHEN REVEALED */
+#rabbit-hole-app {
+  min-height: 100vh;
+  width: 100%;
+}

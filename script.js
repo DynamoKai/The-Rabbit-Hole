@@ -1,6 +1,13 @@
 // ====================================================
 // 2NDNATUR3 DOM ELEMENT SELECTION
 // ====================================================
+const landingPage = document.getElementById("landing-page");
+const rabbitHoleApp = document.getElementById("rabbit-hole-app");
+const drawers = document.querySelectorAll(".cabinet-drawer");
+const terminalDisplay = document.getElementById("terminal-display");
+const terminalTitle = document.getElementById("terminal-title");
+const closeTerminal = document.getElementById("close-terminal");
+const terminalBody = document.getElementById("terminal-content");
 
 /// ===================================================
 /// THE RABBIT HOLE DOM ELEMENT SELECTIONS
@@ -33,6 +40,15 @@ let activeTimestamp = null;
 let editingTimestamp = null;
 let activeAnecdoteKey = null;
 let activeAnecdoteContent = null; // added to prevent duplicate overwriting and ensure exact matches
+
+// --- NEW BLOG DATA ---
+const blogPosts = [
+  // ... (Blog post arrays will go here) ....
+];
+
+const siteContent = {
+  // ... (site content object here) ...
+};
 
 // =================================AUTO-SAVE LOGIC====================================
 
