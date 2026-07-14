@@ -1,3 +1,10 @@
+// ====================================================
+// 2NDNATUR3 DOM ELEMENT SELECTION
+// ====================================================
+
+/// ===================================================
+/// THE RABBIT HOLE DOM ELEMENT SELECTIONS
+/// ===================================================
 const saveBtn = document.getElementById("save-btn");
 const clearAllBtn = document.getElementById("clear-all-btn");
 const journalOutput = document.getElementById("journal-output");
