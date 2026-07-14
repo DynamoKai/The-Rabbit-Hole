@@ -611,3 +611,62 @@ button:hover {
   min-height: 100vh;
   width: 100%;
 }
+
+#landing-page::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 100;
+  pointer-events: none; /* CRUCIAL: allows the user to click the drawers underneath */
+}
+
+/* flickering screen */
+@keyframes crt-flicker {
+  0% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+#landing-page {
+  animation: crt-flicker 0.15s infinite alternate;
+  position: relative;
+}
+
+.rabbit-glitch {
+  width: 150px;
+  opacity: 0.8;
+  filter: sepia(1) hue-rotate(90deg) contrast(1.5); /* Terminal turns green/amber */
+  animation: glitch-anim 2s infinite;
+  display: block;
+  margin: 1rem auto;
+}
+
+@keyframes glitch-anim {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}

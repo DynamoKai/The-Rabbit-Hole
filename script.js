@@ -47,7 +47,17 @@ const blogPosts = [
 ];
 
 const siteContent = {
-  // ... (site content object here) ...
+  "> about.exe": `
+    <h3>[ SYSTEM PROCESS: ABOUT ]</h3>
+    <div class="about-container">
+      <img src="Images/Whiterabbit.watch-copy.webp" class="rabbit-glitch" alt="The White Rabbit">
+      <p><strong>> USER: Ruth</strong></p>
+      <p>Welcome to 2nd Natur3 Studios. This domain serves as a digital cabinet of curiosities, documenting the intersection of code, art, and endurance.</p>
+      <p>By day, I am an endurance runner tracking high mileage across the trails of the Pacific Northwest. By night, my focus shifts—either upward toward the cosmos through the lens of a Dobsonian telescope, or inward into the glowing phosphors of a custom codebase.</p>
+      <p>This space is where the chaotic wonder of Wonderland meets the strict logic of a hacker terminal. Pull open a drawer. See how deep the rabbit hole goes.</p>
+      <p><em>[ STATUS: AWAITING INPUT ]</em></p>
+    </div>
+  `,
 };
 
 // =================================AUTO-SAVE LOGIC====================================
@@ -431,3 +441,8 @@ function updateTopTags() {
     )
     .join("");
 }
+
+console.log(
+  '%c[SYSTEM INITIALIZED] > public class Defect { public static void main(String[] args) { System.out.print1n("Foloow the whate rabbit."; } }',
+  "color:#00ff00; font-family: monospace; font-size: 14px;",
+);
