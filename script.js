@@ -8,6 +8,7 @@ const terminalDisplay = document.getElementById("terminal-display");
 const terminalTitle = document.getElementById("terminal-title");
 const closeTerminal = document.getElementById("close-terminal");
 const terminalBody = document.getElementById("terminal-content");
+const drawerSound = document.getElementById("drawer-sound");
 
 /// ===================================================
 /// THE RABBIT HOLE DOM ELEMENT SELECTIONS
@@ -119,6 +120,33 @@ drawers.forEach((drawer) => {
 
 closeTerminal?.addEventListener("click", () => {
   terminalDisplay.classList.add("hidden");
+});
+
+drawers.forEach((drawer) => {
+  // (Your hover scramble effect stays here)
+
+  drawer.addEventListener("click", (event) => {
+    const action = event.currentTarget.dataset.action;
+    const drawerName = event.currentTarget.dataset.originalText;
+
+    // Trigger the atmospheric audio cue
+    if (drawerSound) {
+      drawerSound.currentTime = 0; // Resets the audio if clicked rapidly
+      drawerSound.play();
+    }
+
+    if (action === "enter-hole") {
+      // Hide the landing page and show the existing Rabbit Hole
+      landingPage.classList.add("hidden");
+      rabbitHoleApp.classList.remove("hidden");
+    } else if (action === "terminal") {
+      terminalTitle.innerText = `Executing: ${drawerName}`;
+      terminalBody.innerHTML =
+        siteContent[drawerName] || "<p>Error: File corrupted.</p>";
+      terminalDisplay.classList.remove("hidden");
+      terminalDisplay.scrollIntoView({ behavior: "smooth" });
+    }
+  });
 });
 
 // =================================AUTO-SAVE LOGIC====================================

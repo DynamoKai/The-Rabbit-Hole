@@ -710,17 +710,31 @@ button:hover {
   position: relative;
 }
 
-/* THE WHITE RABBIT GLITCH EFFECT */
+/* THE WANDERING WHITE RABBIT */
 .rabbit-glitch {
   width: 150px;
   opacity: 0.8;
   filter: sepia(1) hue-rotate(90deg) contrast(1.5);
-  animation: glitch-anim 2s infinite;
   display: block;
   margin: 1rem auto;
+  /* 8-second smooth sweep from left to right and back */
+  animation: sweep-side-to-side 5s ease-in-out infinite;
+  /* animation: glitch-anim 2s infinite; */
 }
 
-@keyframes glitch-anim {
+@keyframes sweep-side-to-side {
+  0% {
+    transform: translateX(-150px);
+  }
+  50% {
+    transform: translateX(150px);
+  }
+  100% {
+    transform: translateX(-150px);
+  }
+}
+
+/* @keyframes glitch-anim {
   0% {
     transform: translate(0);
   }
@@ -739,7 +753,7 @@ button:hover {
   100% {
     transform: translate(0);
   }
-}
+} */
 
 .about-container {
   text-align: left;
