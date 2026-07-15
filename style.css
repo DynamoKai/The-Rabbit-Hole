@@ -710,10 +710,11 @@ button:hover {
   position: relative;
 }
 
+/* THE WHITE RABBIT GLITCH EFFECT */
 .rabbit-glitch {
   width: 150px;
   opacity: 0.8;
-  filter: sepia(1) hue-rotate(90deg) contrast(1.5); /* Terminal turns green/amber */
+  filter: sepia(1) hue-rotate(90deg) contrast(1.5);
   animation: glitch-anim 2s infinite;
   display: block;
   margin: 1rem auto;
@@ -738,4 +739,9 @@ button:hover {
   100% {
     transform: translate(0);
   }
+}
+
+.about-container {
+  text-align: left;
+  line-height: 1.6;
 }

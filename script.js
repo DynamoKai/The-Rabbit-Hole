@@ -46,6 +46,9 @@ const blogPosts = [
   // ... (Blog post arrays will go here) ....
 ];
 
+// ===========================================================================
+// SITE CONTENT & DIRECTORIES
+// ===========================================================================
 const siteContent = {
   "> about.exe": `
     <h3>[ SYSTEM PROCESS: ABOUT ]</h3>
@@ -57,6 +60,10 @@ const siteContent = {
       <p>This space is where the chaotic wonder of Wonderland meets the strict logic of a hacker terminal. Pull open a drawer. See how deep the rabbit hole goes.</p>
       <p><em>[ STATUS: AWAITING INPUT ]</em></p>
     </div>
+  `,
+  "> transmissions.log": `
+    <h3>[ DIRECTORY: TRANSMISSIONS ]</h3>
+    <p>System logs initializing... check back later.</p>
   `,
 };
 
