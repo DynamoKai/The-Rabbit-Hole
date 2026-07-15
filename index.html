@@ -11,23 +11,36 @@
     <!-- ROOM 1: The Landing Page -->
     <main id="landing-page">
       <section class="apothecary-cabinet" id="main-cabinet">
-        <!-- Drawer 1: The Studio Blog/About -->
-         <div class="cabinet-drawer" data-action="terminal" data-original-text="> transmissions.log">
-        <div class="brass-pull"><span class="terminal-label">> transmissions.log</span></div>
-
-        <!-- Drawer 2: Gateway to existiong projects-->
-         <div class="cabinet-drawer" data-action="enter-hole" data-original-text="> the-rabbit-hole.exe">
-          <div class="brass-pull"><span class="terminal-label">> the-rabbit-hole.exe</span></div>
-         </div>
+        <div
+          class="cabinet-drawer"
+          data-action="terminal"
+          data-original-text="> transmissions.log"
+        >
+          <div class="brass-pull">
+            <span class="terminal-label">> transmissions.log</span>
+          </div>
+        </div>
+        <div
+          class="cabinet-drawer"
+          data-action="enter-hole"
+          data-original-text="> the-rabbit-hole.exe"
+        >
+          <div class="brass-pull">
+            <span class="terminal-label">> the-rabbit-hole.exe</span>
+          </div>
+        </div>
       </section>
 
-      <!-- THE EXPANDED TERMINAL VIEW -->
-       <section id="terminal-display" class="hidden">
-        <!-- TERMINAL HEADER AND BOODY FROM PREVIOUS STEP-->
-       </section>
+      <section id="terminal-display" class="hidden">
+        <div class="terminal-header">
+          <span id="terminal-title">_</span>
+          <button id="close-terminal" class="util-btn">✕ Close</button>
+        </div>
+        <div class="terminal-body" id="terminal-content"></div>
+      </section>
     </main>
 
-<!-- ROOM 2: TRH -->
+    <!-- ROOM 2: TRH -->
     <div id="rabbit-hole-app" class="hidden">
       <div class="container">
         <header>

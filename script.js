@@ -60,6 +60,60 @@ const siteContent = {
   `,
 };
 
+// ====================================================
+// DRAWER INTERACTION & SCRAMBLE LOGIC
+// ====================================================
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+
+drawers.forEach((drawer) => {
+  let interval = null;
+
+  drawer.addEventListener("mouseenter", (event) => {
+    let iteration = 0;
+    const label = event.target.querySelector(".terminal-label");
+    const originalText = event.target.dataset.originalText;
+
+    clearInterval(interval);
+
+    interval = setInterval(() => {
+      label.innerText = originalText
+        .split("")
+        .map((letter, index) => {
+          if (index < iteration) {
+            return originalText[index];
+          }
+          return letters[Math.floor(Math.random() * letters.length)];
+        })
+        .join("");
+
+      if (iteration >= originalText.length) {
+        clearInterval(interval);
+      }
+      iteration += 1 / 3;
+    }, 30);
+  });
+
+  drawer.addEventListener("click", (event) => {
+    const action = event.currentTarget.dataset.action;
+    const drawerName = event.currentTarget.dataset.originalText;
+
+    if (action === "enter-hole") {
+      landingPage.classList.add("hidden");
+      rabbitHoleApp.classList.remove("hidden");
+    } else if (action === "terminal") {
+      terminalTitle.innerText = `Executing: ${drawerName}`;
+      terminalBody.innerHTML =
+        siteContent[drawerName] || "<p>Error: File corrupted.</p>";
+      terminalDisplay.classList.remove("hidden");
+      terminalDisplay.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+});
+
+closeTerminal?.addEventListener("click", () => {
+  terminalDisplay.classList.add("hidden");
+});
+
 // =================================AUTO-SAVE LOGIC====================================
 
 function saveDraft() {
@@ -443,6 +497,6 @@ function updateTopTags() {
 }
 
 console.log(
-  '%c[SYSTEM INITIALIZED] > public class Defect { public static void main(String[] args) { System.out.print1n("Foloow the whate rabbit."; } }',
+  '%c[SYSTEM INITIALIZED] > public class Defect { public static void main(String[] args) { System.out.println("Follow the white rabbit."); } }',
   "color:#00ff00; font-family: monospace; font-size: 14px;",
 );
