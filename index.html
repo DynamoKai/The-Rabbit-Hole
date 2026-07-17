@@ -84,9 +84,9 @@
           <h1>The Rabbit Hole</h1>
           <p>Documenting random descents into the unknown.</p>
           <div class="file-controls">
-            <!-- <button id="export-btn" class="util-btn">Export Alice</button>
+            <button id="export-btn" class="util-btn">Export Alice</button>
             <input type="file" id="import-input" style="display: none" />
-            <button id="import-btn" class="util-btn">Import Alice</button> -->
+            <button id="import-btn" class="util-btn">Import Alice</button>
             <button id="sort-btn" class="util-btn">Sort: Newest First</button>
           </div>
         </header>
@@ -94,17 +94,17 @@
         <hr class="dotted-line" />
         <div id="top-tags-container" class="top-tags-wrapper"></div>
 
-        <!-- <div id="topic-slot"></div>
+        <div id="topic-slot"></div>
 
         <section class="entry-form">
           <input
             type="text"
             id="topic"
             placeholder="Topic (e.g., Dyson Sphere Fascinations)"
-          /> -->
-        <!----------------------------- tags entry ----------------------------------------->
-        <!----------------------------- tags entry ----------------------------------------->
-        <!-- <input
+          />
+          <!-- --------------------------- tags entry --------------------------------------- -->
+          <!----------------------------- tags entry ----------------------------------------->
+          <input
             type="text"
             id="tags"
             placeholder="Tags (comma separated: e.g. physics, stars, artificial intelligence)"
@@ -128,40 +128,41 @@
               >1</span
             >
           </div>
-          <textarea id="notes" placeholder="What did you find out?"></textarea> -->
-        <!---------------------------- anecdote section ------------------------------------>
-        <!---------------------------- anecdote section ------------------------------------>
-        <div id="anecdote-sidebar" class="sidebar">
-          <div class="crt-image-container">
-            <img
-              src="Images/Whiterabbit.watch-copy.webp"
-              alt="White Rabbit"
-              class="crt-image"
-            />
-          </div>
-          <div class="sidebar-header">
-            <h2 id="sidebar-title">Anecdote</h2>
-            <button onclick="closeSidebar()" class="close-btn">✕</button>
-          </div>
-          <div class="sidebar-body">
-            <textarea
-              id="sidebar-content"
-              placeholder="Why is a raven like a writing-desk?"
-            ></textarea>
-            <button id="save-anecdote-btn" class="util-btn">
-              Save Changes
-            </button>
-          </div>
-        </div>
-        <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+          <textarea id="notes" placeholder="What did you find out?"></textarea>
 
-        <!-- <div class="button-group">
-            <button id="save-btn">Log Entry</button> -->
-        <!-------------------------- Clear All button ------------------------------------>
-        <!-------------------------- Clear All button ------------------------------------>
-        <!-- <button id="clear-all-btn" class="secondary-btn">Clear All</button>
+          <!-- -------------------------- anecdote section ------------------------------------>
+          <!---------------------------- anecdote section ---------------------------------- -->
+          <div id="anecdote-sidebar" class="sidebar">
+            <div class="crt-image-container">
+              <img
+                src="Images/Whiterabbit.watch-copy.webp"
+                alt="White Rabbit"
+                class="crt-image"
+              />
+            </div>
+            <div class="sidebar-header">
+              <h2 id="sidebar-title">Anecdote</h2>
+              <button onclick="closeSidebar()" class="close-btn">✕</button>
+            </div>
+            <div class="sidebar-body">
+              <textarea
+                id="sidebar-content"
+                placeholder="Why is a raven like a writing-desk?"
+              ></textarea>
+              <button id="save-anecdote-btn" class="util-btn">
+                Save Changes
+              </button>
+            </div>
           </div>
-        </section> -->
+          <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+          <div class="button-group">
+            <button id="save-btn">Log Entry</button>
+            <!-------------------------- Clear All button ------------------------------------>
+            <!-------------------------- Clear All button ------------------------------------>
+            <button id="clear-all-btn" class="secondary-btn">Clear All</button>
+          </div>
+        </section>
 
         <!---------------------------- Search section ------------------------------------>
         <!---------------------------- Search section ------------------------------------>
