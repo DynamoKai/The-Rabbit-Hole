@@ -800,3 +800,23 @@ button:hover {
 body {
   background-color: var(--bg-color); /* deep space baby! */
 }
+
+/* =========================================================================== */
+/* THE RABBIT HOLE: PUBLIC READ-ONLY MODE                                      */
+/* =========================================================================== */
+
+/* Hides the main typing area and global actions buttons */
+#input-container,
+#save-btn,
+#clear-all-btn,
+#export-btn,
+#import-input {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+.edit-btn,
+.delete-btn {
+  display: none !important;
+  pointer-events: none !important;
+}

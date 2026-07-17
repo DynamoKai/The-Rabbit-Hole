@@ -13,10 +13,18 @@ const drawerSound = document.getElementById("drawer-sound");
 /// ===================================================
 /// THE RABBIT HOLE DOM ELEMENT SELECTIONS
 /// ===================================================
-const saveBtn = document.getElementById("save-btn");
-const clearAllBtn = document.getElementById("clear-all-btn");
-const journalOutput = document.getElementById("journal-output");
-const importInput = document.getElementById("import-input");
+// const saveBtn = document.getElementById("save-btn");
+// const clearAllBtn = document.getElementById("clear-all-btn");
+// const journalOutput = document.getElementById("journal-output");
+// const importInput = document.getElementById("import-input");
+
+const publicJournalData = {
+  post_001: {
+    timestamp: 1721113200000,
+    content: "Initial public boot sequence. Filtering and searching is active.",
+    tags: ["system", "update", "pavement"],
+  },
+};
 
 // Load existing entries from LocalStorage on startup
 document.getElementById("tag-filter").addEventListener("input", (e) => {
@@ -260,7 +268,7 @@ saveBtn.addEventListener("click", () => {
       .filter((t) => t !== "");
 
     // Get old entries. add new one, and save back to local storage
-    let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
+    let journalData = publicJournalData;
 
     if (editingTimestamp) {
       const index = entries.findIndex((e) => e.timestamp === editingTimestamp);
