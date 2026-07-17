@@ -785,3 +785,18 @@ button:hover {
   padding: 0;
   line-height: 2;
 }
+
+/* STAR MATRIX CANVAS */
+#star-matrix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* this'll place the matrix to the back */
+  pointer-events: none; /* leave it like this so you can click the cabs */
+}
+
+body {
+  background-color: var(--bg-color); /* deep space baby! */
+}

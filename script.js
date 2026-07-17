@@ -107,7 +107,7 @@ const siteContent = {
   <p><em>[ ADDITONAL SOURCE CODE ARCHIVES PENDING DECLASSIFICATION ]</em></p>
   `,
 
-  " contact.bat": `
+  "> contact.bat": `
   <h3>[ EXECUTING: CONTACT PROTOCOL ]</h3>
   <p>Open for freelance web design, product management consultations, and QA contracting.</p>
 
@@ -117,12 +117,12 @@ const siteContent = {
     <li><strong>Github:</strong> <a href="https://github.com/DynamoKai"
     class="anecdote-link">github.com/DynamoKai</a></li>
     <li><strong>Instagram:</strong> <a href="#"
-    class="anecdote-link">instagram.com/username</a></li>
+    class="anecdote-link">instagram.com/2ndnatur3studios</a></li>
   </ul>
 
-  <div style="margin-top: 2rem;">
+  <div style="margin-top: 2.5rem;">
     <a href="Assets/Ruth_Resume.pdf" download class="util-btn" style="text-decoration:
-    none;">Download Resume_v1.pdf</a>
+    none display: inline-block;">Download Resume_v1.pdf</a>
   </div>
  `,
 };
@@ -594,3 +594,151 @@ console.log(
   '%c[SYSTEM INITIALIZED] > public class Defect { public static void main(String[] args) { System.out.println("Follow the white rabbit."); } }',
   "color:#00ff00; font-family: monospace; font-size: 14px;",
 );
+
+// ===========================================================================
+// INTERACTIVE STAR MATRIX BACKGROUND
+// ===========================================================================
+const canvas = document.getElementById("star-matrix");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particlesArray;
+
+// Get mouse position
+let mouse = {
+  x: null,
+  y: null,
+  radius: 150, // this is how close the mouse needs to be to connect with a star
+};
+
+window.addEventListener("mousemove", function (event) {
+  mouse.x = event.x;
+  mouse.y = event.y;
+});
+
+// Create Particle (Star) Class
+class Particle {
+  constructor(x, y, directionX, directionY, size, color) {
+    this.x = x;
+    this.y = y;
+    this.directionX = directionX;
+    this.directionY = directionY;
+    this.size = size;
+    this.color = color;
+  }
+
+  // Draw individual star
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+    ctx.fillStyle = "#4ade80"; // Phosphor green :)
+    ctx.fill();
+  }
+
+  // Move star
+  update() {
+    // Bounce off edges
+    if (this.x > canvas.width || this.x < 0) {
+      this.directionX = -this.directionX;
+    }
+    if (this.y > canvas.height || this.y < 0) {
+      this.directionY = -this.directionY;
+    }
+    this.x += this.directionX;
+    this.y += this.directionY;
+
+    this.draw();
+  }
+}
+
+// Initialization of the Matrix
+function init() {
+  particlesArray = [];
+  //cal how many stars to spawn based on screen size
+  let numberOfParticles = (canvas.height * canvas.width) / 9000;
+
+  for (let i = 0; i < numberOfParticles; i++) {
+    let size = Math.random() * 2 + 1; // little variation
+    let x = Math.random() * (innerWidth - size * 2 - size * 2) + size * 2;
+    let y = Math.random() * (innerHeight - size * 2 - size * 2) + size * 2;
+    let directionX = Math.random() * 0.8 - 0.4; // Tokyo drifttttt
+    let directionY = Math.random() * 0.8 - 0.4;
+    let color = "#4ade80";
+
+    particlesArray.push(
+      new Particle(x, y, directionX, directionY, size, color),
+    );
+  }
+}
+
+// Check distances and draw connecting lines
+function connect() {
+  let opacityValue = 1;
+  for (let a = 0; a < particlesArray.length; a++) {
+    for (let b = a; b < particlesArray.length; b++) {
+      let distance =
+        (particlesArray[a].x - particlesArray[b].x) *
+          (particlesArray[a].x - particlesArray[b].x) +
+        (particlesArray[a].y - particlesArray[b].y) *
+          (particlesArray[a].y - particlesArray[b].y);
+
+      // Connect starts to each other
+      if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+        opacityValue = 1 - distance / 20000;
+        ctx.strokeStyle = "rgba(74, 222, 128," + opacityValue + ")";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+        ctx.lineTo(particlesArray[b].x.particlesArray[b].y);
+        ctx.stroke();
+      }
+    }
+
+    // Connect stars to mouse
+    if (mouse.x && mouse.y) {
+      let dx = particlesArray[a].x - mouse.x;
+      let dy = particlesArray[a].y - mouse.y;
+      let mouseDistance = Math.sqrt(dx * dx + dy * dy);
+
+      if (mouseDistance < mouse.radius) {
+        // The closer the mouse, the brighter the line
+        opacityValue = 1 - mouseDistance / mouse.radius;
+        ctx.strokeStyle = "rgba(74, 222, 128," + opacityValue + ")";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+// Animation Loop
+function animate() {
+  requestAnimationFrame(animate);
+  ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+  for (let i = 0; i < particlesArray.length; i++) {
+    particlesArray[i].update();
+  }
+  connect();
+}
+
+// Ensure the matrix adapts if the browser window is resized
+window.addEventListener("resize", function () {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  init();
+});
+
+// Clear mouse coordinates when leaving the window so the web doesn't get stuck
+window.addEventListener("mouseout", function () {
+  mouse.x = undefined;
+  mouse.y = undefined;
+});
+
+// Boot Matrix
+init();
+animate();
