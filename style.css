@@ -759,3 +759,29 @@ button:hover {
   text-align: left;
   line-height: 1.6;
 }
+
+/* PORTFOLIO CONTENT STYLING */
+.skills-container h4 {
+  color: var(--accent);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.project-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.project-list li {
+  background: rgba(20, 83, 45, 0.1);
+  border-left: 2px solid var(--accent);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.contact-links {
+  list-style: none;
+  padding: 0;
+  line-height: 2;
+}

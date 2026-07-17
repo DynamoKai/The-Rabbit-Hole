@@ -124,7 +124,7 @@ const siteContent = {
     <a href="Assets/Ruth_Resume.pdf" download class="util-btn" style="text-decoration:
     none;">Download Resume_v1.pdf</a>
   </div>
-  `,
+ `,
 };
 
 // ====================================================
