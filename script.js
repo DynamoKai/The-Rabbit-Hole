@@ -52,19 +52,78 @@ const blogPosts = [
 // ===========================================================================
 const siteContent = {
   "> about.exe": `
-    <h3>[ SYSTEM PROCESS: ABOUT ]</h3>
-    <div class="about-container">
-      <img src="Images/Whiterabbit.watch-copy.webp" class="rabbit-glitch" alt="The White Rabbit">
-      <p><strong>> USER: Ruth</strong></p>
-      <p>Welcome to 2nd Natur3 Studios. This domain serves as a digital cabinet of curiosities, documenting the intersection of code, art, and endurance.</p>
-      <p>By day, I am an endurance runner tracking high mileage across the trails of the Pacific Northwest. By night, my focus shifts—either upward toward the cosmos through the lens of a Dobsonian telescope, or inward into the glowing phosphors of a custom codebase.</p>
-      <p>This space is where the chaotic wonder of Wonderland meets the strict logic of a hacker terminal. Pull open a drawer. See how deep the rabbit hole goes.</p>
-      <p><em>[ STATUS: AWAITING INPUT ]</em></p>
+  <h3>[ SYSTEM PROCESS: ABOUT ]</h3>
+  <div class="about-container">
+    <img src="Images/Whiterabbit.watch-copy.webp" class="rabbit-glitch" alt="The White Rabbit">
+    <p><strong>> USER: Ruth B</strong></p>
+    <p>Welcome to 2nd Natur3 Studios. I am a multidisciplinary builder specializing in<strong>
+    Web Design, Product Management, and Game Testing</strong>.</p>
+    <p>My approach is rooted in the belief that great digital experiances require both chaotic creativity and
+    strict structural logic. Whether I am architecting a customized front-end UI, mapping out a product
+    lifecycle, or stress-testing game mechanics, I treat the process like an endurance run focused on pacing,
+    resilience, and crossing the finish line.</p>
+    <p>When the screen goes dark, you'll usually find me testing my endurance strength on the trails, playing
+    records, star-gazing, or spending time with my partner and our dog, Calypso.</p>
     </div>
   `,
-  "> transmissions.log": `
-    <h3>[ DIRECTORY: TRANSMISSIONS ]</h3>
-    <p>System logs initializing... check back later.</p>
+
+  "> capabilities.sys": `
+  <h3>[ DIRECTORY: CAPABILITIES & SKILLS ]</h3>
+  <div class="skills-container">
+    <h4>> WEB DEVELOPMENT & DESIGN</h4>
+    <p>Building responsive, highly-customized front-end experiences using HTML, CSS, JavaScript, PHP,
+    and Ruby on Rails. Strong focus on thematic UI and immersive digital environments.</p>
+
+    <h4>> PRODUCT MANAGMENT</h4>
+    <p>Shepherding concepts from ideation to deployment. Translating complex technical requirements into
+    actionable roadmaps, ensuring alignment between design, engineering, and user needs.</p>
+
+    <h4>> GAME TESTING & QA</h4>
+    <p>Deep mechanical analysis and QA. I dissect game loops, balance curves, and edge cases. (Ask me about optimal
+    orb-channeling strategies for The Defect).</p>
+
+    <h4>> CURRENT RESEARCH</h4>
+    <p>Actively studying Machine Learning theories(specifically Generative AI), Game Theory, Bevy, and Fyrox.</p>
+    </div>
+  `,
+
+  "> projects.dir": `
+  <h3>[ DIRECTORY: ACTIVE PROJECTS ]</h3>
+  <ul class="project-list">
+    <li>
+      <strong><span class="search-highlight">2nd Natur3 Studios</span></strong><br>
+      <em>Role: Sole Developer / Designer</em><br>
+      This very domain. A single-page application built with JavaScript and CSS, designed to mimic a
+      retro-futuristic operating system.
+    </li>
+    <br>
+    <li>
+      <strong><span class="search-highlight">The Rabbit Hole</span></strong><br>
+      <em>Role: Architect</em><br>
+      A customized, terminal-themed research journal and database system utilizing local storage for data
+      persistance, custom tagging, and markdown parsing. (See how far the rabbit hole goes? > the-rabbit-hole.exe).
+    </li>
+  </ul>
+  <p><em>[ ADDITONAL SOURCE CODE ARCHIVES PENDING DECLASSIFICATION ]</em></p>
+  `,
+
+  " contact.bat": `
+  <h3>[ EXECUTING: CONTACT PROTOCOL ]</h3>
+  <p>Open for freelance web design, product management consultations, and QA contracting.</p>
+
+  <ul class="contact-links" style="list-style: none; padding: 0;">
+    <li><strong>Email:</strong> <a href="mailto:hello@2ndnatur3studios.com"
+    class="anecdote-link">hello@2ndnatur3studios.com</a></li>
+    <li><strong>Github:</strong> <a href="https://github.com/DynamoKai"
+    class="anecdote-link">github.com/DynamoKai</a></li>
+    <li><strong>Instagram:</strong> <a href="#"
+    class="anecdote-link">instagram.com/username</a></li>
+  </ul>
+
+  <div style="margin-top: 2rem;">
+    <a href="Assets/Ruth_Resume.pdf" download class="util-btn" style="text-decoration:
+    none;">Download Resume_v1.pdf</a>
+  </div>
   `,
 };
 
