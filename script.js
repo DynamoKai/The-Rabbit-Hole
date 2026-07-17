@@ -10,13 +10,13 @@ const closeTerminal = document.getElementById("close-terminal");
 const terminalBody = document.getElementById("terminal-content");
 const drawerSound = document.getElementById("drawer-sound");
 
-/// ===================================================
-/// THE RABBIT HOLE DOM ELEMENT SELECTIONS
-/// ===================================================
-// const saveBtn = document.getElementById("save-btn");
-// const clearAllBtn = document.getElementById("clear-all-btn");
-// const journalOutput = document.getElementById("journal-output");
-// const importInput = document.getElementById("import-input");
+// / ===================================================
+// / THE RABBIT HOLE DOM ELEMENT SELECTIONS
+// / ===================================================
+const saveBtn = document.getElementById("save-btn");
+const clearAllBtn = document.getElementById("clear-all-btn");
+const journalOutput = document.getElementById("journal-output");
+const importInput = document.getElementById("import-input");
 
 const publicJournalData = {
   post_001: {
@@ -268,7 +268,7 @@ saveBtn.addEventListener("click", () => {
       .filter((t) => t !== "");
 
     // Get old entries. add new one, and save back to local storage
-    let journalData = publicJournalData;
+    let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
 
     if (editingTimestamp) {
       const index = entries.findIndex((e) => e.timestamp === editingTimestamp);
@@ -698,7 +698,7 @@ function connect() {
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-        ctx.lineTo(particlesArray[b].x.particlesArray[b].y);
+        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
         ctx.stroke();
       }
     }
