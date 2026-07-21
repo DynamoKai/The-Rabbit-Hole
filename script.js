@@ -124,7 +124,7 @@ const siteContent = {
     class="anecdote-link">hello@2ndnatur3studios.com</a></li>
     <li><strong>Github:</strong> <a href="https://github.com/DynamoKai"
     class="anecdote-link">github.com/DynamoKai</a></li>
-    <li><strong>Instagram:</strong> <a href="#"
+    <li><strong>Instagram:</strong> <a href="https://www.instagram.com/2ndnatur3studios/"
     class="anecdote-link">instagram.com/2ndnatur3studios</a></li>
   </ul>
 
