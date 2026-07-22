@@ -185,15 +185,35 @@ drawers.forEach((drawer) => {
   });
 });
 
+// ===========================================================================
+// CLOSE TERMINAL LOGIC (The "X" Button)
+// ===========================================================================
 closeTerminal?.addEventListener("click", () => {
+  // 1. Hide the terminal display
   terminalDisplay.classList.add("hidden");
+
+  // 2. Pull all the cabinet drawers back to the center
+  drawers.forEach((d) => {
+    d.classList.remove("is-shifted-right");
+    d.classList.remove("is-shifted-left");
+  });
+
+  // 3. Play the satisfying mechanical click
+  if (typeof drawerSound !== "undefined" && drawerSound) {
+    drawerSound.currentTime = 0;
+    drawerSound.play();
+  }
 });
 
 // ===========================================================================
 // CABINET INTERACTION LOGIC
 // ===========================================================================
 
+// ===========================================================================
+// CABINET INTERACTION LOGIC (Click Events)
+// ===========================================================================
 drawers.forEach((drawer) => {
+  // STRICTLY SINGULAR "drawer" TO PREVENT CRASHES!
   drawer.addEventListener("click", (event) => {
     // 1. KINETIC MOVEMENT LOGIC
     // Send the clicked drawer to the right, and all others to the left
@@ -212,44 +232,47 @@ drawers.forEach((drawer) => {
       drawerSound.currentTime = 0;
       drawerSound.play();
     }
+
     const action = event.currentTarget.dataset.action;
     const drawerName = event.currentTarget.dataset.originalText;
 
     // 3. TERMINAL ACTION PROTOCOL
     if (action === "terminal") {
-      if (typeof terminalTitle !== "undefined")
-        terminalTitle.innerText = `Executing: ${drawerName}`;
+      terminalTitle.innerText = `Executing: ${drawerName}`;
 
-      if (typeof terminalBody !== "undefined") {
-        terminalBody.innerHTML =
-          (siteContent[drawerName] || "<p>Error: File corrupted.</p>") +
-          `
-          <div style="margin-top: 3rem; border-top: 1px solid rgba(74, 222, 128, 0.3); padding-top: 1.5rem;">
-            <button class="util-btn" id="return-main-btn"><< Close Connection & Return</button>
-          </div>
-        `;
-      }
+      // Inject the portfolio content PLUS a permanent return button at the bottom
+      terminalBody.innerHTML =
+        (siteContent[drawerName] || "<p>Error: File corrupted.</p>") +
+        `
+        <div style="margin-top: 3rem; border-top: 1px solid rgba(74, 222, 128, 0.3); padding-top: 1.5rem;">
+          <button class="util-btn" id="return-main-btn"><< Close Connection & Return</button>
+        </div>
+      `;
 
-      if (typeof terminalDisplay !== "undefined") {
-        terminalDisplay.classList.remove("hidden");
-        terminalDisplay.scrollIntoView({ behavior: "smooth" });
-      }
+      terminalDisplay.classList.remove("hidden");
+      terminalDisplay.scrollIntoView({ behavior: "smooth" });
 
       // 4. THE RETURN LOGIC
+      // Listen for the return button to reverse the animation
       const returnBtn = document.getElementById("return-main-btn");
       if (returnBtn) {
         returnBtn.addEventListener("click", () => {
+          // Bring all drawers smoothly back to the center
           drawers.forEach((d) => {
             d.classList.remove("is-shifted-right");
             d.classList.remove("is-shifted-left");
           });
-          if (typeof terminalDisplay !== "undefined")
-            terminalDisplay.classList.add("hidden");
+
+          // Hide the terminal
+          terminalDisplay.classList.add("hidden");
+
+          // Smooth scroll back to the top of the cabinet
           const cabinet = document.getElementById("main-cabinet");
           if (cabinet) cabinet.scrollIntoView({ behavior: "smooth" });
         });
       }
     } else if (action === "enter-hole") {
+      // (Your existing Rabbit Hole logic)
       if (typeof landingPage !== "undefined")
         landingPage.classList.add("hidden");
       if (typeof rabbitHoleApp !== "undefined")
