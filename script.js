@@ -189,29 +189,73 @@ closeTerminal?.addEventListener("click", () => {
   terminalDisplay.classList.add("hidden");
 });
 
-drawers.forEach((drawer) => {
-  // (Your hover scramble effect stays here)
+// ===========================================================================
+// CABINET INTERACTION LOGIC
+// ===========================================================================
 
-  drawer.addEventListener("click", (event) => {
+drawers.forEach((drawer) => {
+  drawers.addEventListener("click", (event) => {
+    // 1. KINETIC MOVEMENT LOGIC
+    // Send the clicked drawer to the right, and all others to the left
+    drawers.forEach((d) => {
+      if (d === event.currentTarget) {
+        d.classList.add("is-shifted-right");
+        d.classList.remove("is-shifted-left");
+      } else {
+        d.classList.add("is-shifted-left");
+        d.classList.remove("is-shifted-right");
+      }
+    });
+
+    // 2. AUDIO TRIGGER
+    if (drawerSound) {
+      drawerSound.currentTime = 0;
+      drawerSound.onplay();
+    }
     const action = event.currentTarget.dataset.action;
     const drawerName = event.currentTarget.dataset.originalText;
 
-    // Trigger the atmospheric audio cue
-    if (drawerSound) {
-      drawerSound.currentTime = 0; // Resets the audio if clicked rapidly
-      drawerSound.play();
-    }
+    // 3. TERMINAL ACTION PROTOCOL
+    if (action === "terminal") {
+      terminalTitle.innerText = "Executing: ${drawerName}";
 
-    if (action === "enter-hole") {
-      // Hide the landing page and show the existing Rabbit Hole
-      landingPage.classList.add("hidden");
-      rabbitHoleApp.classList.remove("hidden");
-    } else if (action === "terminal") {
-      terminalTitle.innerText = `Executing: ${drawerName}`;
+      // Inject the portfolio content and a permanent return button at the bottom
       terminalBody.innerHTML =
-        siteContent[drawerName] || "<p>Error: File corrupted.</p>";
+        (siteContent[drawerName] || "<p>Error: File corrupted.</p>") +
+        `
+
+      <div style="margin-top: 3rem; border-top: 1px solid rgba(74, 222, 128, 0.3);
+      padding-top: 1.5rem;">
+        <button class="util-btn" id="return-main-btn"><< Close Connection & Return</button>
+      </div>
+      `;
+
       terminalDisplay.classList.remove("hidden");
       terminalDisplay.scrollIntoView({ behavior: "smooth" });
+
+      // 4. THE RETURN LOGIC
+      // Listen for the return button to reverse the animation
+      document
+        .getElementById("return-main-btn")
+        .addEventListener("click", () => {
+          // Bring all drawers smoothly back to the center
+          drawers.forEach((d) => {
+            d.classList.remove("is-shifted-right");
+            d.classList.remove("is-shifted-left");
+          });
+
+          // Hide the terminal
+          terminalDisplay.classList.add("hidden");
+
+          // Smooth scroll back to the top of the cab
+          document
+            .getElementById("main-cabinet")
+            .scrollIntoView({ behavior: "smooth" });
+        });
+    } else if (action === "enter-hole") {
+      // (Keep existing TRH logic here)
+      landingPage.classList.add("hidden");
+      rabbitHoleApp.classList.remove("hidden");
     }
   });
 });
