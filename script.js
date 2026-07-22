@@ -194,7 +194,7 @@ closeTerminal?.addEventListener("click", () => {
 // ===========================================================================
 
 drawers.forEach((drawer) => {
-  drawers.addEventListener("click", (event) => {
+  drawer.addEventListener("click", (event) => {
     // 1. KINETIC MOVEMENT LOGIC
     // Send the clicked drawer to the right, and all others to the left
     drawers.forEach((d) => {
