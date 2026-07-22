@@ -633,7 +633,53 @@ button:hover {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  transition:
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.6s ease;
+  animation: slideInFromLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   position: relative;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-80px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* staggered entry */
+.cabinet-drawer:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.cabinet-drawer:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.cabinet-drawer:nth-child(3) {
+  animation-delay: 0.6s;
+}
+.cabinet-drawer:nth-child(4) {
+  animation-delay: 0.8s;
+}
+.cabinet-drawer:nth-child(5) {
+  animation-delay: 1s;
+}
+
+/* clicked drawer flies to the right */
+.cabinet-drawer.is-shifted-right {
+  transform: translateX(120vw);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* unlciked drawer flies to the left */
+.cabinet-drawer.is-shifted-left {
+  transform: translateX(-120vw); /* completely pushed past VW */
+  opacity: 0;
+  pointer-events: none;
 }
 
 .cabinet-drawer:hover {
