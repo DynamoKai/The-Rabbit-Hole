@@ -206,8 +206,38 @@ closeTerminal?.addEventListener("click", () => {
 });
 
 // ===========================================================================
-// CABINET INTERACTION LOGIC
+// RABBIT HOLE RETURN TO NATURE BUTTON LOGIC
 // ===========================================================================
+
+const exitHoleBtn = document.getElementById("exit-hole-btn");
+
+if (exitHoleBtn) {
+  exitHoleBtn.addEventListener("click", () => {
+    // 1. Hide the Rabbit Hole interface
+    if (typeof rabbitHoleApp !== "undefined")
+      rabbitHoleApp.classList.add("hidden");
+
+    // 2. Bring the main landing page back
+    if (typeof landingPage !== "undefined")
+      landingPage.classList.remove("hidden");
+
+    // 3. Pull the cabinet drawers back to the center
+    drawers.forEach((d) => {
+      d.classList.remove("is-shifted-right");
+      d.classList.remove("is-shifted-left");
+    });
+
+    // 4. Scroll back to the cabinet
+    const cabinet = document.getElementById("main-cabinet");
+    if (cabinet) cabinet.scrollIntoView({ behavior: "smooth" });
+
+    // 5. Play the drawer sound
+    if (typeof drawerSound !== "undefined" && drawerSound) {
+      drawerSound.currentTime = 0;
+      drawerSound.play();
+    }
+  });
+}
 
 // ===========================================================================
 // CABINET INTERACTION LOGIC (Click Events)
