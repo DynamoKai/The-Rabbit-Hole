@@ -127,11 +127,6 @@ const siteContent = {
     <li><strong>Instagram:</strong> <a href="https://www.instagram.com/2ndnatur3studios/"
     class="anecdote-link">instagram.com/2ndnatur3studios</a></li>
   </ul>
-
-  <div style="margin-top: 2.5rem;">
-    <a href="Assets/Ruth_Resume.pdf" download class="util-btn" style="text-decoration:
-    none display: inline-block;">Download Resume_v1.pdf</a>
-  </div>
  `,
 };
 
