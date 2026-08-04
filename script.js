@@ -111,6 +111,14 @@ const siteContent = {
       A customized, terminal-themed research journal and database system utilizing local storage for data
       persistance, custom tagging, and markdown parsing. (See how far the rabbit hole goes? > the-rabbit-hole.exe).
     </li>
+    <br>
+    <li>
+      <strong><span class="search-highlight">A Precocious Child Candle Company</span></strong><br>
+      <em>Role: SEO & Product Management</em><br>
+      Directing SEO strategy and product integration for A Precocious Child Candle Co.
+      Executing baseline site crawls, building a scalable SEO framework for new inventory,
+      and optimizing ingredient-specific keywords to drive competitive search volume.
+    </li>
   </ul>
   <p><em>[ ADDITONAL SOURCE CODE ARCHIVES PENDING DECLASSIFICATION ]</em></p>
   `,
