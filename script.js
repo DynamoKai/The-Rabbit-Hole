@@ -15,19 +15,29 @@ const drawerSound = document.getElementById("drawer-sound");
 // / ===================================================
 const journalOutput = document.getElementById("journal-output");
 
-// The Global Terminal Search Listener
-document.getElementById("tag-filter")?.addEventListener("input", (e) => {
-  const searchTerm =
-    document.getElementById("curiositySearch")?.value.toLowerCase() || "";
-  if (typeof displayEntries === "function")
-    displayEntries(e.target.value.toLowerCase(), searchTerm);
+// ===========================================================================
+// GLOBAL EVENT LISTENERS (Unified)
+// ===========================================================================
+document
+  .getElementById("curiositySearch")
+  ?.addEventListener("input", displayEntries);
+document
+  .getElementById("tag-filter")
+  ?.addEventListener("input", displayEntries);
+
+// New listener for your Depth Slider
+document.getElementById("depth")?.addEventListener("input", (e) => {
+  document.getElementById("depth-display").innerText = e.target.value;
+  displayEntries();
 });
 
-document.getElementById("curiositySearch")?.addEventListener("input", (e) => {
-  const tagFilter =
-    document.getElementById("tag-filter")?.value.toLowerCase() || "";
-  if (typeof displayEntries === "function")
-    displayEntries(tagFilter, e.target.value.toLowerCase());
+// Streamlined Sort listener
+document.getElementById("sort-btn")?.addEventListener("click", (e) => {
+  sortNewestFirst = !sortNewestFirst;
+  e.target.innerText = sortNewestFirst
+    ? "Sort: Newest First"
+    : "Sort: Oldest First";
+  displayEntries();
 });
 
 window.onload = () => {
@@ -47,6 +57,7 @@ const publicJournalData = {
   entry_001: {
     timestamp: 1787227200000, // Unix timestamp for August 20, 2026
     tags: ["Database Architecture", "E-commerce", "Technical SEO", "APCCC"],
+    depth: 1,
     text: `
       <h3>Down the Rabbit Hole: Finding Sand for a Box in a Wonderland of E-commerce Data</h3>
 
@@ -365,22 +376,6 @@ drawers.forEach((drawer) => {
         rabbitHoleApp.classList.remove("hidden");
     }
   });
-});
-// ===========================================================================
-// SORT BUTTON LOGIC
-// ===========================================================================
-document.getElementById("sort-btn")?.addEventListener("click", (e) => {
-  sortNewestFirst = !sortNewestFirst;
-  e.target.innerText = sortNewestFirst
-    ? "Sort: Newest First"
-    : "Sort: Oldest First";
-
-  // Refresh the display with the new sorting, keeping any active search/filters
-  const tagFilter =
-    document.getElementById("tag-filter")?.value.toLowerCase() || "";
-  const searchTerm =
-    document.getElementById("curiositySearch")?.value.toLowerCase() || "";
-  displayEntries(tagFilter, searchTerm);
 });
 
 // ===========================================================================
