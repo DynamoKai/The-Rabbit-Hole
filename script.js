@@ -757,6 +757,93 @@ console.log(
 );
 
 // ===========================================================================
+// THE RABBIT HOLE: RENDERING ENGINE
+// ===========================================================================
+function displayEntries(tagFilter = "", searchTerm = "") {
+  const journalOutpost = document.getElementById("journal-output");
+  if (!journalOutput) return; // Failsafe if the HTML is missing
+
+  const currentData = publicJournalData;
+
+  journalOutput.innerHTML = "";
+
+  // Convert my data object into an array so I can sort and filter
+  let entriesArray = Object.entries(currentData);
+
+  // A. Apply Search Keyword Filter
+  if (searchTerm) {
+    entriesArray = entriesArray.filter(([key, entry]) => {
+      const textMatch =
+        entry.text && entry.text.toLowerCase().includes(searchTerm);
+      const tagMatch =
+        entry.tags &&
+        entry.tags.some((tag) => tag.toLowerCase().includes(searchTerm));
+      return textMatch || tagMatch;
+    });
+  }
+
+  // B. Apply Sidebar Tag Filter
+  if (tagFilter) {
+    entriesArray = entriesArray.filter(
+      ([key, entry]) =>
+        entry.tags && entry.tags.some((tag) => tag.toLowerCase() === tagFilter),
+    );
+  }
+
+  // C. Apply Descent Sorting (Newest vs Oldest)
+  entriesArray.sort((a, b) => {
+    return sortNewestFirst
+      ? b[1].timestamp - a[1].timestamp
+      : a[1].timestamp - b[1].timestamp;
+  });
+
+  // D. Empty State of Search
+  if (entriesArray.length === 0) {
+    journalOutput.innerHTML = `<p class="empty-state" style="color: var(--accent); opacity:0.7;">No transmissions match this frequency, try something else.</p>`;
+    return;
+  }
+
+  // E. Construct and Render the Posts
+  entriesArray.forEach(([key, entry]) => {
+    const entryDiv = document.createElement("div");
+    entryDiv.className = "journal-entry"; //should catch existing CSS
+
+    // dynamic tag building
+    let tagsHTML = "";
+    if (entry.tags && entry.tags.length > 0) {
+      tahsHTML =
+        `<div class="entry-tags" style="margin-bottom: 1rem; color:
+      var(--accent);">` +
+        entry.tags
+          .map(
+            (tag) =>
+              `<span class="tag" style="margin-right: 10px; cursor: pointer;">[${tag}]</span>`,
+          )
+          .join("") +
+        `</div>`;
+    }
+
+    // Format the UNIX timestamp
+    const dateStr = new Date(entry.timestamp).toLocaleDateString();
+
+    // Final HTML block assembly for transmission
+    entryDiv.innerHTML = `
+    <div class="entry-meta" style="margin-bottom: 0.5rem; opacity: 0.7;">
+      <small>> LOG_DATE: ${dateStr}</small>
+      </div>
+      ${tagsHTML}
+      <div class="entry-text cheshire-text" style="line-height: 1.6;">
+        ${entry.text}
+        </div>
+        <hr style="border: 0; border-bottom: 1px dashed rgba(74, 222, 128, 0.3); margin: 3rem
+        0;">
+      `;
+
+    journalOutput.appendChild(entryDiv);
+  });
+}
+
+// ===========================================================================
 // INTERACTIVE STAR MATRIX BACKGROUND
 // ===========================================================================
 const canvas = document.getElementById("star-matrix");
