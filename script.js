@@ -13,10 +13,7 @@ const drawerSound = document.getElementById("drawer-sound");
 // / ===================================================
 // / THE RABBIT HOLE DOM ELEMENT SELECTIONS
 // / ===================================================
-const saveBtn = document.getElementById("save-btn");
-const clearAllBtn = document.getElementById("clear-all-btn");
 const journalOutput = document.getElementById("journal-output");
-const importInput = document.getElementById("import-input");
 
 // The Global Terminal Search Listener
 document.getElementById("tag-filter")?.addEventListener("input", (e) => {
@@ -48,8 +45,8 @@ let activeAnecdoteContent = null; // added to prevent duplicate overwriting and 
 // ===========================================================================
 const publicJournalData = {
   entry_001: {
-    timestamp: 1724131200000, // Unix timestamp for August 20, 2026
-    tags: ["Database Architecture", "E-commerce", "Technical SEO"],
+    timestamp: 1787227200000, // Unix timestamp for August 20, 2026
+    tags: ["Database Architecture", "E-commerce", "Technical SEO", "APCCC"],
     text: `
       <h3>Down the Rabbit Hole: Finding Sand for a Box in a Wonderland of E-commerce Data</h3>
 
@@ -369,174 +366,30 @@ drawers.forEach((drawer) => {
     }
   });
 });
-// =================================AUTO-SAVE LOGIC====================================
-
-function saveDraft() {
-  if (!editingTimestamp) {
-    const draft = {
-      topic: document.getElementById("topic").value,
-      tags: document.getElementById("tags").value,
-      depth: document.getElementById("depth").value,
-      notes: document.getElementById("notes").value,
-    };
-    localStorage.setItem("rabbitHoleDraft", JSON.stringify(draft));
-  }
-}
-
-function loadDraft() {
-  const draftData = localStorage.getItem("rabbitHoleDraft");
-  if (draftData) {
-    const draft = JSON.parse(draftData);
-    document.getElementById("topic").value = draft.topic || "";
-    document.getElementById("tags").value = draft.tags || "";
-
-    if (draft.depth) {
-      document.getElementById("depth").value = draft.depth;
-      document.getElementById("depth-display").innerText = draft.depth;
-    }
-    document.getElementById("notes").value = draft.notes || "";
-  }
-}
-
-// Attach the saveDraft function to listen for every keystrokes of slider movement
-["topic", "tags", "notes", "depth"].forEach((id) => {
-  document.getElementById(id).addEventListener("input", saveDraft);
-});
-
-// LOGIC FOR PROCESS TAGS AND SAVING
-saveBtn.addEventListener("click", () => {
-  const topic = document.getElementById("topic").value;
-  const notes = document.getElementById("notes").value;
-  const tagsRaw = document.getElementById("tags").value;
-  const depth = document.getElementById("depth").value; // Capture depth
-  // const date = new Date().toLocaleDateString();
-  // const timestamp = Date.now(); // for accurate sorting
-
-  if (topic && notes) {
-    // Convert comma-separated string into a clean array
-    // Const entry = { topic, notes, date };
-    const tags = tagsRaw
-      .split(",")
-      .map((t) => t.trim())
-      .filter((t) => t !== "");
-
-    // Get old entries. add new one, and save back to local storage
-    let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-
-    if (editingTimestamp) {
-      const index = entries.findIndex((e) => e.timestamp === editingTimestamp);
-      if (index !== -1) {
-        entries[index].topic = topic;
-        entries[index].notes = notes;
-        entries[index].tags = tags;
-        entries[index].depth = depth;
-        // Note: I will keep the original date and timestamp intact
-      }
-      // reset the edit mode
-      editingTimestamp = null;
-      document.getElementById("save-btn").innerText = "Log Entry";
-    } else {
-      // Create a new entry
-      const date = new Date().toLocaleDateString();
-      const timestamp = Date.now();
-      entries.unshift({ topic, notes, tags, date, timestamp, depth });
-    }
-
-    localStorage.setItem("rabbitHoles", JSON.stringify(entries));
-    displayEntries(document.getElementById("tag-filter").value.toLowerCase());
-
-    // CLEAR THE TEMP DRAFT ON SUCCESSFUL SAVE
-    localStorage.removeItem("rabbitHoleDraft");
-
-    // Reset fields
-    document.getElementById("topic").value = "";
-    document.getElementById("notes").value = "";
-    document.getElementById("tags").value = "";
-    document.getElementById("depth").value = "1"; //RESET SLIDER
-    document.getElementById("depth-display").innerText = "1";
-  }
-});
-
+// ===========================================================================
 // SORT BUTTON LOGIC
-document.getElementById("sort-btn").addEventListener("click", (e) => {
+// ===========================================================================
+document.getElementById("sort-btn")?.addEventListener("click", (e) => {
   sortNewestFirst = !sortNewestFirst;
   e.target.innerText = sortNewestFirst
     ? "Sort: Newest First"
     : "Sort: Oldest First";
-  displayEntries(document.getElementById("tag-filter").value.toLowerCase());
+
+  // Refresh the display with the new sorting, keeping any active search/filters
+  const tagFilter =
+    document.getElementById("tag-filter")?.value.toLowerCase() || "";
+  const searchTerm =
+    document.getElementById("curiositySearch")?.value.toLowerCase() || "";
+  displayEntries(tagFilter, searchTerm);
 });
 
-// EXPORT TO JSON FILE
-document.getElementById("export-btn").addEventListener("click", () => {
-  const data = localStorage.getItem("rabbitHoles");
-  if (!data) return alert("Curiouser and curiouser");
-
-  const blob = new Blob([data], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `rabbit-holes-${new Date().toISOString().slice(0, 10)}.json`;
-  a.click();
-});
-
-// IMPORT FROM JSON FILE
-document
-  .getElementById("import-btn")
-  .addEventListener("click", () => importInput.click());
-
-importInput.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    localStorage.setItem("rabbitHoles", event.target.result);
-    displayEntries();
-  };
-  reader.readAsText(file);
-});
-
-// CLEAR ALL LOGIC
-clearAllBtn.addEventListener("click", () => {
-  if (confirm("Are you sure you want to delete all entries?")) {
-    localStorage.removeItem("rabbitHoles");
-    displayEntries();
-  }
-});
-
-// EDIT ENTRY LOGIC
-function editEntry(timestamp) {
-  const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-  const entryToEdit = entries.find((e) => e.timestamp === timestamp);
-
-  if (entryToEdit) {
-    // Populate the form fields with the entry data
-    document.getElementById("topic").value = entryToEdit.topic;
-    document.getElementById("tags").value = entryToEdit.tags.join(", ");
-    document.getElementById("depth").value = entryToEdit.depth || 1;
-    document.getElementById("depth-display").innerText = entryToEdit.depth || 1;
-    document.getElementById("notes").value = entryToEdit.notes;
-
-    // setting the global editing flag and change the button text
-    editingTimestamp = timestamp;
-    document.getElementById("save-btn").innerText = "Update Entry";
-
-    // Scroll user back to the top to see the form
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-}
-
-// INDIVIDUAL DELETE LOGIC
-function deleteEntry(timestamp) {
-  let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-  entries = entries.filter((e) => e.timestamp !== timestamp);
-  localStorage.setItem("rabbitHoles", JSON.stringify(entries));
-  displayEntries();
-}
-
-// Sidebar Control Functions
+// ===========================================================================
+// ANECDOTE SIDEBAR (SCRATCHPAD LOGIC)
+// ===========================================================================
 function openAnecdote(phrase, content, timestamp) {
   activeTimestamp = timestamp;
   activeAnecdoteKey = phrase;
-  activeAnecdoteContent = content; // Store exact content to match correctly when saving
+  activeAnecdoteContent = content;
 
   document.getElementById("sidebar-title").innerText = phrase;
   document.getElementById("sidebar-content").value = content;
@@ -550,38 +403,11 @@ function closeSidebar() {
   document.getElementById("sidebar-overlay").classList.remove("active");
 }
 
-// SAVE EDITED ANECDOTE BACK TO LOCALSTORAGE
-document.getElementById("save-anecdote-btn").addEventListener("click", () => {
-  const newContent = document.getElementById("sidebar-content").value;
-  let entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-
-  const entryIndex = entries.findIndex((e) => e.timestamp === activeTimestamp);
-  if (entryIndex !== -1) {
-    let hasReplaced = false; // Prevents overwriting multiple identical anecdotes
-
-    entries[entryIndex].notes = entries[entryIndex].notes.replace(
-      /\[(.*?)\]\{((?:[^{}]|\{\{[\s\S]*?\}\})*)\}/g,
-      (match, p1, p2) => {
-        // Now checks BOTH phrase and exact content to prevent saving issues
-        if (
-          !hasReplaced &&
-          p1 === activeAnecdoteKey &&
-          p2 === activeAnecdoteContent
-        ) {
-          hasReplaced = true;
-          activeAnecdoteContent = newContent; // Update so you can click save multiple times in a row
-          return `[${p1}]{${newContent}}`;
-        }
-        return match;
-      },
-    );
-
-    localStorage.setItem("rabbitHoles", JSON.stringify(entries));
-    displayEntries(document.getElementById("tag-filter").value.toLowerCase());
-    closeSidebar();
-  }
+// Transforms the "Save" button into a scratchpad closer for the read-only ledger
+document.getElementById("save-anecdote-btn")?.addEventListener("click", () => {
+  // Add any future addendum logic here! For now, it simply closes the pad.
+  closeSidebar();
 });
-
 // HELPER FUNCTION TO HIGHLIGHT TEXT
 function highlightText(text, query) {
   // If there's no search query, return the normal text
