@@ -47,10 +47,10 @@ let activeAnecdoteContent = null; // added to prevent duplicate overwriting and 
 // THE RABBIT HOLE: BACKEND DATA LEDGER
 // ===========================================================================
 const publicJournalData = {
-  post_001: {
+  entry_001: {
     timestamp: 1724131200000, // Unix timestamp for August 20, 2026
     tags: ["Database Architecture", "E-commerce", "Technical SEO"],
-    content: `
+    text: `
       <h3>Down the Rabbit Hole: Finding Sand for a Box in a Wonderland of E-commerce Data</h3>
 
       <p>I always understood what a domino effect was, but it never hit me like the
