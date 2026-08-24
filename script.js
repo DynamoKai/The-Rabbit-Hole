@@ -25,13 +25,13 @@ document
   .getElementById("tag-filter")
   ?.addEventListener("input", displayEntries);
 
-// New listener for your Depth Slider
+// listener for Depth Slider
 document.getElementById("depth")?.addEventListener("input", (e) => {
   document.getElementById("depth-display").innerText = e.target.value;
   displayEntries();
 });
 
-// Streamlined Sort listener
+// Sort listener
 document.getElementById("sort-btn")?.addEventListener("click", (e) => {
   sortNewestFirst = !sortNewestFirst;
   e.target.innerText = sortNewestFirst
@@ -580,18 +580,32 @@ console.log(
 // ===========================================================================
 // THE RABBIT HOLE: RENDERING ENGINE
 // ===========================================================================
-function displayEntries(tagFilter = "", searchTerm = "") {
-  const journalOutpost = document.getElementById("journal-output");
-  if (!journalOutput) return; // Failsafe if the HTML is missing
+function displayEntries() {
+  const journalOutput = document.getElementById("journal-output");
+  if (!journalOutput) return;
 
   const currentData = publicJournalData;
-
   journalOutput.innerHTML = "";
 
-  // Convert my data object into an array so I can sort and filter
+  // 1. Capture current filter states directly from the DOM
+  const searchTerm =
+    document.getElementById("curiositySearch")?.value.toLowerCase() || "";
+  const tagFilter =
+    document.getElementById("tag-filter")?.value.toLowerCase() || "";
+  const selectDepth = parseInt(
+    document.getElementById("depth")?.value || "1",
+    10,
+  );
+
   let entriesArray = Object.entries(currentData);
 
-  // A. Apply Search Keyword Filter
+  // 2. Apply Depth Filter (Reveals posts matching the exact slider)
+  entriesArray = entriesArray.filter(([key, entry]) => {
+    const postDepth = entry.depth || 1;
+    return postDepth === selectedDepth;
+  });
+
+  // 3. Apply Search Keyword Filter
   if (searchTerm) {
     entriesArray = entriesArray.filter(([key, entry]) => {
       const textMatch =
@@ -603,7 +617,7 @@ function displayEntries(tagFilter = "", searchTerm = "") {
     });
   }
 
-  // B. Apply Sidebar Tag Filter
+  // 4. Apply Sidebar Tag Filter
   if (tagFilter) {
     entriesArray = entriesArray.filter(
       ([key, entry]) =>
@@ -611,59 +625,55 @@ function displayEntries(tagFilter = "", searchTerm = "") {
     );
   }
 
-  // C. Apply Descent Sorting (Newest vs Oldest)
+  // 5. Apply Descent Sorting
   entriesArray.sort((a, b) => {
     return sortNewestFirst
       ? b[1].timestamp - a[1].timestamp
       : a[1].timestamp - b[1].timestamp;
   });
 
-  // D. Empty State of Search
+  // 6. Empty State
   if (entriesArray.length === 0) {
-    journalOutput.innerHTML = `<p class="empty-state" style="color: var(--accent); opacity:0.7;">No transmissions match this frequency, try something else.</p>`;
+    journalOutput.innerHTML = `<p class="empty-state" style="color": var(--accent);
+    opacity: 0.7;">No transmissions found at this depth or frequency.</p>`;
     return;
   }
 
-  // E. Construct and Render the Posts
+  // 7. Render Posts
   entriesArray.forEach(([key, entry]) => {
     const entryDiv = document.createElement("div");
-    entryDiv.className = "journal-entry"; //should catch existing CSS
+    entryDiv.className = "journal-entry";
 
-    // dynamic tag building
     let tagsHTML = "";
     if (entry.tags && entry.tags.length > 0) {
-      tahsHTML =
+      tagsHTML =
         `<div class="entry-tags" style="margin-bottom: 1rem; color:
       var(--accent);">` +
         entry.tags
           .map(
-            (tag) =>
-              `<span class="tag" style="margin-right: 10px; cursor: pointer;">[${tag}]</span>`,
+            (tag) => `<span class="tag" style="margin-right: 10px; cursor:
+        pointer;">[${tag}]</span>`,
           )
           .join("") +
         `</div>`;
     }
 
-    // Format the UNIX timestamp
     const dateStr = new Date(entry.timestamp).toLocaleDateString();
 
-    // Final HTML block assembly for transmission
+    // Injects the depth level dynamically into the meta header
     entryDiv.innerHTML = `
     <div class="entry-meta" style="margin-bottom: 0.5rem; opacity: 0.7;">
-      <small>> LOG_DATE: ${dateStr}</small>
-      </div>
-      ${tagsHTML}
-      <div class="entry-text cheshire-text" style="line-height: 1.6;">
-        ${entry.text}
-        </div>
-        <hr style="border: 0; border-bottom: 1px dashed rgba(74, 222, 128, 0.3); margin: 3rem
-        0;">
-      `;
-
+      <small>> LOG_DATE: ${dateStr} | DEPTH: ${entry.depth || 1}</small>
+    </div>
+    ${tagsHTML}
+    <div class="entry-text cheshire-text" style="line-height: 1.6;">
+      ${entry.text}
+    </div>
+    <hr style="border: 0; border-bottom: 1px dashed rgba(74, 222, 128, 0.3); margin: 3rem 0;">
+    `;
     journalOutput.appendChild(entryDiv);
   });
 }
-
 // ===========================================================================
 // INTERACTIVE STAR MATRIX BACKGROUND
 // ===========================================================================
