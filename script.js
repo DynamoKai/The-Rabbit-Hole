@@ -56,7 +56,13 @@ let activeAnecdoteContent = null; // added to prevent duplicate overwriting and 
 const publicJournalData = {
   entry_001: {
     timestamp: 1787227200000, // Unix timestamp for August 20, 2026
-    tags: ["Database Architecture", "E-commerce", "Technical SEO", "APCCC"],
+    tags: [
+      "Database Architecture",
+      "E-commerce",
+      "Technical SEO",
+      "APCCC",
+      "Wix",
+    ],
     depth: 1,
     text: `
       <h3>Down the Rabbit Hole: Finding Sand for a Box in a Wonderland of E-commerce Data</h3>
@@ -95,8 +101,12 @@ const publicJournalData = {
         </li>
         <li>
           <strong>Embrace the madness:</strong> Raw database exports are rarely
-          clean. I write custom Javascript to parse the data, strip out formatting
-          anomalies, and standardize the product schemas. This ensures that when
+          clean. [I write custom Javascript to parse the data, strip out formatting
+          anomalies, and standardize the product schemas]{From creating a CMS from a CSV spreadsheet
+          and working with Wix's editor I worked directly in the Wix Studio Editor
+          as I wasn't to familiar with the Wix IDE yet. Much like learning a new
+          instrument, takes time to know where the chords live in a different
+          orientation.} This ensures that when
           the data is finally mapped back into the new system, the import is seamless.
         </li>
         <li>
@@ -431,15 +441,17 @@ function parseMarkdown(text, timestamp) {
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
     .replace(/\*(.*?)\*/g, "<em>$1</em>")
     .replace(/^>\s?(.*$)/gm, '<blockquote class="md-quote">$1</blockquote>')
-    .replace(/\[(.*?)\]\{([\s\S]*?)\}/g, (match, phrase, content) => {
+    .replace(/\[([\s\S]*?)\]\{([\s\S]*?)\}/g, (match, phrase, content) => {
       const safePhrase = phrase
-        .replace(/'/g, "\\'")
-        .replace(/"/g, "&quot;")
-        .replace(/\n/g, "");
+        .replace(/\s+/g, " ")
+        .replace(/'/g, "&#39;")
+        .replace(/"/g, "&quot;");
+
       const safeContent = content
-        .replace(/'/g, "\\'")
-        .replace(/"/g, "&quot;")
-        .replace(/\n/g, "\\n");
+        .replace(/\s+/g, " ")
+        .replace(/'/g, "&#39;")
+        .replace(/"/g, "&quot;");
+
       return `<span class="anecdote-link" onclick="openAnecdote('${safePhrase}', '${safeContent}', ${timestamp})">${phrase}</span>`;
     })
     .replace(/\{\{([\s\S]*?)\}\}/g, '<span class="cheshire-text">$1</span>');
