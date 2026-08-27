@@ -114,6 +114,16 @@ const publicJournalData = {
       before.</em></p>
     `,
   },
+  entry_002: {
+    timestamp: 1786500000000,
+    tags: ["Rust", "Systems", "Memory"],
+    depth: 2,
+    text: `
+      <h3>[DECRYPTED] The Borrow Checker's Toll</h3>
+      <p>If you're reading this, you adjusted the depth slider. Welcome to Level 2.</p>
+      <p>Learning Rust is like learning to drive a manual transmission car while someone yells at you every time you grind the gears. The [borrow checker]{Rust's strict compiler feature that ensures memory safety without a garbage collector.} is ruthless, but once you internalize the rules of ownership, the speed and safety are unmatched.</p>
+    `,
+  },
 };
 
 // Bypass local storage and force the app to use your public ledger
@@ -415,7 +425,25 @@ function highlightText(text, query) {
   return text.replace(regex, '<span class="search-highlight">$1</span>');
 }
 
-// DISPLAY LOGIC UPDATED with REGEX PARSER
+// HELPER FUNCTION TO PARSE MARKDOWN & ANECDOTES
+function parseMarkdown(text, timestamp) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+    .replace(/^>\s?(.*$)/gm, '<blockquote class="md-quote">$1</blockquote>')
+    .replace(/\[(.*?)\]\{([\s\S]*?)\}/g, (match, phrase, content) => {
+      const safePhrase = phrase
+        .replace(/'/g, "\\'")
+        .replace(/"/g, "&quot;")
+        .replace(/\n/g, "");
+      const safeContent = content
+        .replace(/'/g, "\\'")
+        .replace(/"/g, "&quot;")
+        .replace(/\n/g, "\\n");
+      return `<span class="anecdote-link" onclick="openAnecdote('${safePhrase}', '${safeContent}', ${timestamp})">${phrase}</span>`;
+    })
+    .replace(/\{\{([\s\S]*?)\}\}/g, '<span class="cheshire-text">$1</span>');
+}
 
 // TOP TAGS LOGIC
 function updateTopTags() {
@@ -559,8 +587,9 @@ function displayEntries() {
 
       const dateStr = new Date(entry.timestamp).toLocaleDateString();
 
-      // Highlight text from body with helper function
-      const displayNotes = highlightText(entry.text, searchTerm);
+      // Parse the markdown/anecdotes FIRST, then highlight search terms
+      const parsedText = parseMarkdown(entry.text, entry.timestamp);
+      const displayNotes = highlightText(parsedText, searchTerm);
 
       entryDiv.innerHTML = `
       <div class="entry-meta" style="margin-bottom: 0.5rem; opacity: 0.7;">
