@@ -416,118 +416,6 @@ function highlightText(text, query) {
 }
 
 // DISPLAY LOGIC UPDATED with REGEX PARSER
-function displayEntries(filter = "", searchQuery = "") {
-  updateTopTags();
-
-  const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
-  const journalOutput = document.getElementById("journal-output");
-
-  // The filter logic should check if any tag in the entry includes the search term
-  let filteredEntries = entries.filter((entry) => {
-    // 1. Check if it matches the specific tag filter
-    const matchesTag =
-      !filter || entry.tags.some((tag) => tag.toLowerCase().includes(filter));
-    // if (!filter) return true; // Show all if filter is empty
-    // return entry.tags.some((tag) => tag.toLowerCase().includes(filter)); MIGHT
-
-    // 2. check if it matches the global terminal search
-    const matchesSearch =
-      !searchQuery ||
-      entry.topic.toLowerCase().includes(searchQuery) ||
-      entry.notes.toLowerCase().includes(searchQuery) ||
-      entry.tags.some((tag) => tag.toLowerCase().includes(searchQuery));
-
-    return matchesTag && matchesSearch;
-  });
-
-  // SORT
-  filteredEntries.sort((a, b) => {
-    return sortNewestFirst
-      ? b.timestamp - a.timestamp
-      : a.timestamp - b.timestamp;
-  });
-
-  journalOutput.innerHTML = filteredEntries
-    .map((e) => {
-      // spotlight highlight text search
-      const parsedNotes = e.notes
-        // 1. MARKDOWN: Bold (**text**)
-        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-
-        // 2. MARKDOWN: Italics (*text*)
-        .replace(/\*(.*?)\*/g, "<em>$1</em>")
-
-        // 3. MARKDOWN: Blockquotes/Margins (> text)
-        .replace(/^>\s?(.*$)/gm, '<blockquote class="md-quote">$1</blockquote>')
-
-        // 4. ANECDOTES
-        .replace(
-          /\[(.*?)\]\{((?:[^{}]|\{\{[\s\S]*?\}\})*)\}/g,
-          (match, phrase, content) => {
-            // FIXED ESCAPING: Safe generation for inline JS onclick handlers
-            const safePhrase = phrase
-              .replace(/&/g, "&amp;")
-              .replace(/\\/g, "\\\\")
-              .replace(/'/g, "\\'") // Using \' prevents JS syntax errors
-              .replace(/"/g, "&quot;")
-              .replace(/\n/g, "\\n")
-              .replace(/\r/g, "");
-
-            const safeContent = content
-              .replace(/&/g, "&amp;") // Prevents string desync during saving
-              .replace(/\\/g, "\\\\")
-              .replace(/'/g, "\\'") // Using \' prevents JS syntax errors
-              .replace(/"/g, "&quot;")
-              .replace(/\{/g, "&#123;")
-              .replace(/\}/g, "&#125;")
-              .replace(/\n/g, "\\n")
-              .replace(/\r/g, "");
-
-            return `<span class="anecdote-link" onclick="openAnecdote('${safePhrase}', '${safeContent}', ${e.timestamp})">${phrase}</span>`;
-          },
-        )
-        // The Second Pass: Cheshire Encryption
-        .replace(
-          /\{\{([\s\S]*?)\}\}/g,
-          '<span class="cheshire-text">$1</span>',
-        );
-
-      // DEPTH INDICATOR CALCULATION
-      // THE `|| 1` ensures it defaults to 1 hole if old entries don't have a depth saved.
-      const depthIndicator = "🕳️".repeat(e.depth || 1);
-
-      // 2. Applied spotligh highlights AFTER parsing
-      const displayTopic = highlightText(e.topic, searchQuery);
-      const displayNotes = highlightText(parsedNotes, searchQuery);
-
-      // RETURN SETTING UPDATE
-      return `
-    <div class="journal-entry">
-        <div class="entry-actions">
-          <button class="edit-btn" onclick="editEntry(${e.timestamp})">✎ Edit</button>
-          <button class="delete-btn" onclick="deleteEntry(${e.timestamp})">✕ Delete</button>
-          </div>
-      <small>${e.date} | DESCENT: ${depthIndicator}</small>
-
-      <div class="tag-container">
-        ${e.tags
-          .slice(0, 3) // restricts the placement to top 3 tags
-          .map((tag) => {
-            const isMatch =
-              filter && tag.toLowerCase().includes(filter) ? " match" : "";
-            const displayTag = highlightText(tag, searchQuery);
-            return `<span class='tag-pill${isMatch}'>${displayTag}</span>`;
-          })
-          .join("")}
-      </div>
-
-      <h3>${displayTopic}</h3>
-      <p>${displayNotes}</p>
-    </div>
-    `;
-    })
-    .join("");
-}
 
 // TOP TAGS LOGIC
 function updateTopTags() {
@@ -578,102 +466,117 @@ console.log(
 );
 
 // ===========================================================================
-// THE RABBIT HOLE: RENDERING ENGINE
+// THE RABBIT HOLE: RENDERING ENGINE (AUGUST 2026)
 // ===========================================================================
 function displayEntries() {
+  updateTopTags(); //keep tags updating
+
   const journalOutput = document.getElementById("journal-output");
   if (!journalOutput) return;
 
   const currentData = publicJournalData;
   journalOutput.innerHTML = "";
 
-  // 1. Capture current filter states directly from the DOM
+  // 1. Capture current filter state
   const searchTerm =
     document.getElementById("curiositySearch")?.value.toLowerCase() || "";
   const tagFilter =
-    document.getElementById("tag-filter")?.value.toLowerCase() || "";
-  const selectDepth = parseInt(
+    document.getElementById("tag-filter")?.valve.toLowerCase() || "";
+
+  const selectedDepth = parseInt(
     document.getElementById("depth")?.value || "1",
     10,
   );
 
   let entriesArray = Object.entries(currentData);
 
-  // 2. Apply Depth Filter (Reveals posts matching the exact slider)
+  // 2. Depth Filter Application
   entriesArray = entriesArray.filter(([key, entry]) => {
     const postDepth = entry.depth || 1;
     return postDepth === selectedDepth;
   });
 
-  // 3. Apply Search Keyword Filter
-  if (searchTerm) {
+  // 3. Search Keyword Application
+  if (searchterm) {
     entriesArray = entriesArray.filter(([key, entry]) => {
-      const textMatch =
-        entry.text && entry.text.toLowerCase().includes(searchTerm);
-      const tagMatch =
-        entry.tags &&
-        entry.tags.some((tag) => tag.toLowerCase().includes(searchTerm));
-      return textMatch || tagMatch;
+      const postDepth = entry.depth || 1;
+      return postDepth === selectedDepth;
     });
-  }
 
-  // 4. Apply Sidebar Tag Filter
-  if (tagFilter) {
-    entriesArray = entriesArray.filter(
-      ([key, entry]) =>
-        entry.tags && entry.tags.some((tag) => tag.toLowerCase() === tagFilter),
-    );
-  }
-
-  // 5. Apply Descent Sorting
-  entriesArray.sort((a, b) => {
-    return sortNewestFirst
-      ? b[1].timestamp - a[1].timestamp
-      : a[1].timestamp - b[1].timestamp;
-  });
-
-  // 6. Empty State
-  if (entriesArray.length === 0) {
-    journalOutput.innerHTML = `<p class="empty-state" style="color": var(--accent);
-    opacity: 0.7;">No transmissions found at this depth or frequency.</p>`;
-    return;
-  }
-
-  // 7. Render Posts
-  entriesArray.forEach(([key, entry]) => {
-    const entryDiv = document.createElement("div");
-    entryDiv.className = "journal-entry";
-
-    let tagsHTML = "";
-    if (entry.tags && entry.tags.length > 0) {
-      tagsHTML =
-        `<div class="entry-tags" style="margin-bottom: 1rem; color:
-      var(--accent);">` +
-        entry.tags
-          .map(
-            (tag) => `<span class="tag" style="margin-right: 10px; cursor:
-        pointer;">[${tag}]</span>`,
-          )
-          .join("") +
-        `</div>`;
+    // 3. Search Keyword Filter Application
+    if (searchTerm) {
+      entriesArray = entriesArray.filter(([key, entry]) => {
+        const textMatch =
+          entry.text && entry.text.toLowerCase().includes(searchTerm);
+        const tagMatch =
+          entry.tags &&
+          entry.tags.some((tag) => tag.toLowerCase().includes(searchTerm));
+        const topicMatch = key.toLowerCase().includes(searchTerm); // fallback for titles if added
+        return textMatch || tagMatch || topicMatch;
+      });
     }
 
-    const dateStr = new Date(entry.timestamp).toLocaleDateString();
+    // 4. Sidebar Tag Filter Application
+    if (tagFilter) {
+      entriesArray = entriesArray.filter(
+        ([key, entry]) =>
+          entry.tags &&
+          entry.tags.some((tag) => tag.toLowerCase() === tagFilter),
+      );
+    }
 
-    // Injects the depth level dynamically into the meta header
-    entryDiv.innerHTML = `
-    <div class="entry-meta" style="margin-bottom: 0.5rem; opacity: 0.7;">
-      <small>> LOG_DATE: ${dateStr} | DEPTH: ${entry.depth || 1}</small>
-    </div>
-    ${tagsHTML}
-    <div class="entry-text cheshire-text" style="line-height: 1.6;">
-      ${entry.text}
-    </div>
+    // 5. Descent Sorting Application
+    entriesArray.sort((a, b) => {
+      return sortNewestFirst
+        ? b[1].timestamp - a[1].timestamp
+        : a[1].timestamp - b[1].timestamp;
+    });
+
+    // 6. Empty Space
+    if (entriesArray.length === 0) {
+      journalOutput.innerHTML = `<p class="empty-state" style="color: var(--accent); opacity: 0.7;">[404] The rabbit hole is empty. No transmissions found for that query...curiouser and curiouser.</p>`;
+      return;
+    }
+
+    // 7. Render Posts with Highlighting & Parsing
+    entriesArray.forEach(([key, entry]) => {
+      const entryDiv = document.createElement("div");
+      entryDiv.className = "journal-entry";
+
+      // Tag Hightlighting
+      let tagsHTML = "";
+      if (entry.tags && entry.tags.length > 0) {
+        tagsHTML =
+          `<div class="tag-container" style="margin-bottom: 1rem; color: var(--accent);">` +
+          entry.tags
+            .map((tag) => {
+              const displayTag = highlightText(tag, searchTerm);
+              return `<span class='tag-pill'>[${displaytag}]</span>`;
+            })
+            .join("") +
+          `</div>`;
+      }
+
+      const dateStr = new Date(entry.timestamp).toLocaleDateString();
+
+      // Highlight text from body with helper function
+      const displayNotes = highlightText(entry.text, searchTerm);
+
+      entryDiv.innerHTML = `
+      <div class="entry-meta" style="margin-bottom: 0.5rem; opacity: 0.7;">
+        <small>> LOG_DATE: ${dateStr} | DEPTH: ${entry.depth || 1}</small>
+      </div>
+        ${tagsHTML}
+      <div class="entry-text cheshire-text" style="line-height: 1.6;">
+        ${displayNotes}
+      </div>
     <hr style="border: 0; border-bottom: 1px dashed rgba(74, 222, 128, 0.3); margin: 3rem 0;">
     `;
-    journalOutput.appendChild(entryDiv);
-  });
+      (journalOutput, appendChild(entryDiv));
+    });
+  }
 }
+
 // ===========================================================================
 // INTERACTIVE STAR MATRIX BACKGROUND
 // ===========================================================================
