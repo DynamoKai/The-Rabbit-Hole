@@ -63,7 +63,7 @@ const publicJournalData = {
       "APCCC",
       "Wix",
     ],
-    depth: 1,
+    depth: 2,
     text: `
       <h3>Down the Rabbit Hole: Finding Sand for a Box in a Wonderland of E-commerce Data</h3>
 
@@ -102,7 +102,7 @@ const publicJournalData = {
         <li>
           <strong>Embrace the madness:</strong> Raw database exports are rarely
           clean. [I write custom Javascript to parse the data, strip out formatting
-          anomalies, and standardize the product schemas]{From creating a CMS from a CSV spreadsheet
+          anomalies, and standardize the product schemas]{By creating a CMS from a CSV spreadsheet
           and working with Wix's editor I worked directly in the Wix Studio Editor
           as I wasn't to familiar with the Wix IDE yet. Much like learning a new
           instrument, takes time to know where the chords live in a different
@@ -125,13 +125,15 @@ const publicJournalData = {
     `,
   },
   entry_002: {
-    timestamp: 1786500000000,
-    tags: ["Rust", "Systems", "Memory"],
-    depth: 2,
+    timestamp: 1787269500000,
+    tags: ["Doored", "Bikes", "Portland", "Accidents"],
+    depth: 1,
     text: `
-      <h3>[DECRYPTED] The Borrow Checker's Toll</h3>
-      <p>If you're reading this, you adjusted the depth slider. Welcome to Level 2.</p>
-      <p>Learning Rust is like learning to drive a manual transmission car while someone yells at you every time you grind the gears. The [borrow checker]{Rust's strict compiler feature that ensures memory safety without a garbage collector.} is ruthless, but once you internalize the rules of ownership, the speed and safety are unmatched.</p>
+      <h3>Swinging Past The River Man</h3>
+      <p>I got doored for the first time in my life in a bike friendly city.</p>
+      <p>It weird to say the door came out of nowhere but it did. Almost in slow motion, but so was my movements even though I was going maybe 13 mph. A few cuts on my right pinky and ring finger that just started healing today. [Shaken]{at least until the bruises fade} up and I still haven't checked to see if my bike still rides right. Glad I was wearing a helmet, because it could have been way worse.</p>
+      <p>The guy that doored me was considerate enough to give my a ride. [He]{and his family who kind of saw the whole thing occur
+      or rather the after math} was pretty insistent. Thinking about shooting him a text to let him know I'm healing well. It was intentional thats for sure. A bit of bad timing in a very stressfull week.</p>
     `,
   },
 };
@@ -442,14 +444,15 @@ function parseMarkdown(text, timestamp) {
     .replace(/\*(.*?)\*/g, "<em>$1</em>")
     .replace(/^>\s?(.*$)/gm, '<blockquote class="md-quote">$1</blockquote>')
     .replace(/\[([\s\S]*?)\]\{([\s\S]*?)\}/g, (match, phrase, content) => {
+      // Use standard JS escaping (\\') instead of HTML entities for single quotes
       const safePhrase = phrase
         .replace(/\s+/g, " ")
-        .replace(/'/g, "&#39;")
+        .replace(/'/g, "\\'")
         .replace(/"/g, "&quot;");
 
       const safeContent = content
         .replace(/\s+/g, " ")
-        .replace(/'/g, "&#39;")
+        .replace(/'/g, "\\'")
         .replace(/"/g, "&quot;");
 
       return `<span class="anecdote-link" onclick="openAnecdote('${safePhrase}', '${safeContent}', ${timestamp})">${phrase}</span>`;
@@ -533,7 +536,7 @@ function displayEntries() {
   // 2. Depth Filter Application
   entriesArray = entriesArray.filter(([key, entry]) => {
     const postDepth = entry.depth || 1;
-    return postDepth === selectedDepth;
+    return postDepth <= selectedDepth;
   });
 
   // 3. Search Keyword Filter Application
