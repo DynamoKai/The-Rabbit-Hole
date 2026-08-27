@@ -481,7 +481,7 @@ function displayEntries() {
   const searchTerm =
     document.getElementById("curiositySearch")?.value.toLowerCase() || "";
   const tagFilter =
-    document.getElementById("tag-filter")?.valve.toLowerCase() || "";
+    document.getElementById("tag-filter")?.value.toLowerCase() || "";
 
   const selectedDepth = parseInt(
     document.getElementById("depth")?.value || "1",
@@ -497,7 +497,7 @@ function displayEntries() {
   });
 
   // 3. Search Keyword Application
-  if (searchterm) {
+  if (searchTerm) {
     entriesArray = entriesArray.filter(([key, entry]) => {
       const postDepth = entry.depth || 1;
       return postDepth === selectedDepth;
@@ -551,7 +551,7 @@ function displayEntries() {
           entry.tags
             .map((tag) => {
               const displayTag = highlightText(tag, searchTerm);
-              return `<span class='tag-pill'>[${displaytag}]</span>`;
+              return `<span class='tag-pill'>[${displayTag}]</span>`;
             })
             .join("") +
           `</div>`;
@@ -572,7 +572,7 @@ function displayEntries() {
       </div>
     <hr style="border: 0; border-bottom: 1px dashed rgba(74, 222, 128, 0.3); margin: 3rem 0;">
     `;
-      (journalOutput, appendChild(entryDiv));
+      journalOutput.appendChild(entryDiv);
     });
   }
 }
