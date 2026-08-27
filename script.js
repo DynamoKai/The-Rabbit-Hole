@@ -524,74 +524,66 @@ function displayEntries() {
     return postDepth === selectedDepth;
   });
 
-  // 3. Search Keyword Application
+  // 3. Search Keyword Filter Application
   if (searchTerm) {
     entriesArray = entriesArray.filter(([key, entry]) => {
-      const postDepth = entry.depth || 1;
-      return postDepth === selectedDepth;
+      const textMatch =
+        entry.text && entry.text.toLowerCase().includes(searchTerm);
+      const tagMatch =
+        entry.tags &&
+        entry.tags.some((tag) => tag.toLowerCase().includes(searchTerm));
+      const topicMatch = key.toLowerCase().includes(searchTerm);
+      return textMatch || tagMatch || topicMatch;
     });
+  }
 
-    // 3. Search Keyword Filter Application
-    if (searchTerm) {
-      entriesArray = entriesArray.filter(([key, entry]) => {
-        const textMatch =
-          entry.text && entry.text.toLowerCase().includes(searchTerm);
-        const tagMatch =
-          entry.tags &&
-          entry.tags.some((tag) => tag.toLowerCase().includes(searchTerm));
-        const topicMatch = key.toLowerCase().includes(searchTerm); // fallback for titles if added
-        return textMatch || tagMatch || topicMatch;
-      });
+  // 4. Sidebar Tag Filter Application
+  if (tagFilter) {
+    entriesArray = entriesArray.filter(
+      ([key, entry]) =>
+        entry.tags && entry.tags.some((tag) => tag.toLowerCase() === tagFilter),
+    );
+  }
+
+  // 5. Descent Sorting Application
+  entriesArray.sort((a, b) => {
+    return sortNewestFirst
+      ? b[1].timestamp - a[1].timestamp
+      : a[1].timestamp - b[1].timestamp;
+  });
+
+  // 6. Empty Space
+  if (entriesArray.length === 0) {
+    journalOutput.innerHTML = `<p class="empty-state" style="color: var(--accent); opacity: 0.7;">[404] The rabbit hole is empty. No transmissions found for that query...curiouser and curiouser.</p>`;
+    return;
+  }
+
+  // 7. Render Posts with Highlighting & Parsing
+  entriesArray.forEach(([key, entry]) => {
+    const entryDiv = document.createElement("div");
+    entryDiv.className = "journal-entry";
+
+    // Tag Hightlighting
+    let tagsHTML = "";
+    if (entry.tags && entry.tags.length > 0) {
+      tagsHTML =
+        `<div class="tag-container" style="margin-bottom: 1rem; color: var(--accent);">` +
+        entry.tags
+          .map((tag) => {
+            const displayTag = highlightText(tag, searchTerm);
+            return `<span class='tag-pill'>[${displayTag}]</span>`;
+          })
+          .join("") +
+        `</div>`;
     }
 
-    // 4. Sidebar Tag Filter Application
-    if (tagFilter) {
-      entriesArray = entriesArray.filter(
-        ([key, entry]) =>
-          entry.tags &&
-          entry.tags.some((tag) => tag.toLowerCase() === tagFilter),
-      );
-    }
+    const dateStr = new Date(entry.timestamp).toLocaleDateString();
 
-    // 5. Descent Sorting Application
-    entriesArray.sort((a, b) => {
-      return sortNewestFirst
-        ? b[1].timestamp - a[1].timestamp
-        : a[1].timestamp - b[1].timestamp;
-    });
+    // Parse the markdown/anecdotes FIRST, then highlight search terms
+    const parsedText = parseMarkdown(entry.text, entry.timestamp);
+    const displayNotes = highlightText(parsedText, searchTerm);
 
-    // 6. Empty Space
-    if (entriesArray.length === 0) {
-      journalOutput.innerHTML = `<p class="empty-state" style="color: var(--accent); opacity: 0.7;">[404] The rabbit hole is empty. No transmissions found for that query...curiouser and curiouser.</p>`;
-      return;
-    }
-
-    // 7. Render Posts with Highlighting & Parsing
-    entriesArray.forEach(([key, entry]) => {
-      const entryDiv = document.createElement("div");
-      entryDiv.className = "journal-entry";
-
-      // Tag Hightlighting
-      let tagsHTML = "";
-      if (entry.tags && entry.tags.length > 0) {
-        tagsHTML =
-          `<div class="tag-container" style="margin-bottom: 1rem; color: var(--accent);">` +
-          entry.tags
-            .map((tag) => {
-              const displayTag = highlightText(tag, searchTerm);
-              return `<span class='tag-pill'>[${displayTag}]</span>`;
-            })
-            .join("") +
-          `</div>`;
-      }
-
-      const dateStr = new Date(entry.timestamp).toLocaleDateString();
-
-      // Parse the markdown/anecdotes FIRST, then highlight search terms
-      const parsedText = parseMarkdown(entry.text, entry.timestamp);
-      const displayNotes = highlightText(parsedText, searchTerm);
-
-      entryDiv.innerHTML = `
+    entryDiv.innerHTML = `
       <div class="entry-meta" style="margin-bottom: 0.5rem; opacity: 0.7;">
         <small>> LOG_DATE: ${dateStr} | DEPTH: ${entry.depth || 1}</small>
       </div>
@@ -601,9 +593,8 @@ function displayEntries() {
       </div>
     <hr style="border: 0; border-bottom: 1px dashed rgba(74, 222, 128, 0.3); margin: 3rem 0;">
     `;
-      journalOutput.appendChild(entryDiv);
-    });
-  }
+    journalOutput.appendChild(entryDiv);
+  });
 }
 
 // ===========================================================================
