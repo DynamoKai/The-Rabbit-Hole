@@ -62,6 +62,7 @@ const publicJournalData = {
       "Technical SEO",
       "APCCC",
       "Wix",
+      "Animals As Leaders",
     ],
     depth: 2,
     text: `
@@ -125,15 +126,25 @@ const publicJournalData = {
     `,
   },
   entry_002: {
-    timestamp: 1787269500000,
-    tags: ["Doored", "Bikes", "Portland", "Accidents"],
+    timestamp: 1787527020000,
+    tags: [
+      "Doored",
+      "Bikes",
+      "Portland",
+      "Accidents",
+      "Coding Health",
+      "Nick Drake",
+    ],
     depth: 1,
     text: `
       <h3>Swinging Past The River Man</h3>
       <p>I got doored for the first time in my life in a bike friendly city.</p>
-      <p>It weird to say the door came out of nowhere but it did. Almost in slow motion, but so was my movements even though I was going maybe 13 mph. A few cuts on my right pinky and ring finger that just started healing today. [Shaken]{at least until the bruises fade} up and I still haven't checked to see if my bike still rides right. Glad I was wearing a helmet, because it could have been way worse.</p>
-      <p>The guy that doored me was considerate enough to give my a ride. [He]{and his family who kind of saw the whole thing occur
-      or rather the after math} was pretty insistent. Thinking about shooting him a text to let him know I'm healing well. It was intentional thats for sure. A bit of bad timing in a very stressfull week.</p>
+
+      <p>It's strange to say the door came out of nowhere, but it did. Almost in slow motion, but so were my movements even though I was going maybe 13 mph. A few cuts on my right pinky and ring finger that just started healing today. [Shaken]{at least until the bruises fade} up and I still haven't checked to see if my bike still rides right. Glad I was wearing a helmet, because it could have been way worse.</p>
+
+      <p>The guy that doored me was considerate enough to give my a ride. [He]{and his family who kind of saw the whole thing occur or rather the after math} was pretty insistent. Thinking about shooting him a text to let him know I'm healing well. It wasn't intentional thats for sure. A bit of bad timing in a very stressfull week.</p>
+
+	    <p>This accident brought me to an interesting intersection of thought on coding and how we have to be in the right state of mind to get things right. The day after the accident, I was making mistakes that I would classify as [trivial]{Your standard punctuation errors, string misspellings, etc} to say the least. I ended up just stepping away from the computer for the rest of the day after the maybe 8th mistake. It wasn't like me and I know for a fact now my body was telling me to stop. <strong>Remember to be kind to yourself and know when you need to physically heal, else you remain in a healing state longer than you need to be.</strong></p>
     `,
   },
 };
