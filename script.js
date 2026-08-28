@@ -160,15 +160,10 @@ const siteContent = {
   <h3>[ SYSTEM PROCESS: ABOUT ]</h3>
   <div class="about-container">
     <img src="Images/Whiterabbit.watch-copy.webp" class="rabbit-glitch" alt="The White Rabbit">
-    <p><strong>> USER: Ruth B</strong></p>
-    <p>Welcome to 2nd Natur3 Studios. I am a multidisciplinary builder specializing in<strong>
-    Web Design, Product Management, and Game Testing</strong>.</p>
-    <p>My approach is rooted in the belief that great digital experiances require both chaotic creativity and
-    strict structural logic. Whether I am architecting a customized front-end UI, mapping out a product
-    lifecycle, or stress-testing game mechanics, I treat the process like an endurance run focused on pacing,
-    resilience, and crossing the finish line.</p>
-    <p>When the screen goes dark, you'll usually find me testing my endurance strength on the trails, playing
-    records, star-gazing, or spending time with my partner and our dog, Calypso.</p>
+    <p><strong>> USER: AR Bly</strong></p>
+    <p>Welcome to 2nd Natur3 Studios. I am a multidisciplinary builder, systems architect, and game tester.</strong>.</p>
+    <p>Great digital environments demand both chaotic creativity and absolute structural logic. Whether I am building a custom UI from the ground up, directing a product lifecycle, or breaking game mechanics to see how they tick, my process mirrors an endurance run. It is about establishing the pace, adapting to the terrain, and executing until the final mile.</p>
+    <p>When I log off, I am usually testing my own physical limits on the trails, dropping a needle on a record, stargazing, or off-grid with my partner and our dog, Calypso.</p>
     </div>
   `,
 
@@ -184,11 +179,10 @@ const siteContent = {
     actionable roadmaps, ensuring alignment between design, engineering, and user needs.</p>
 
     <h4>> GAME TESTING & QA</h4>
-    <p>Deep mechanical analysis and QA. I dissect game loops, balance curves, and edge cases. (Ask me about optimal
-    orb-channeling strategies for The Defect).</p>
+    <p>Deep mechanical analysis and QA. I dissect game loops, balance curves, and edge cases.</p>
 
     <h4>> CURRENT RESEARCH</h4>
-    <p>Actively studying Machine Learning theories(specifically Generative AI), Game Theory, Bevy, and Fyrox.</p>
+    <p>Actively studying Machine Learning theories(specifically Generative AI), Game Theory, Bevy, Rust, and Fyrox.</p>
     </div>
   `,
 
@@ -215,6 +209,12 @@ const siteContent = {
       Directing SEO strategy and product integration for A Precocious Child Candle Co.
       Executing baseline site crawls, building a scalable SEO framework for new inventory,
       and optimizing ingredient-specific keywords to drive competitive search volume.
+    </li>
+    <br>
+    <li>
+      <strong><span class="search-highlight">The Homegrown Way</span></strong><br>
+      <em>Role: Full-Stack Development & UI Design</em><br>
+      Engineering a custom web application for The Homegrown Way anchored by a distinct, Studio Ghibli-inspired aesthetic. Integrating Cal.com and Stripe to build a seamless automated scheduling and payment pipeline, translating highly creative design into a lightweight, responsive, and friction-free user experience.
     </li>
   </ul>
   <p><em>[ ADDITONAL SOURCE CODE ARCHIVES PENDING DECLASSIFICATION ]</em></p>
