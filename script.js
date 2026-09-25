@@ -169,12 +169,12 @@ const templateCatalog = [
     blurb:
       "A retro desktop-style site for home service businesses: a service explorer, a how-it-works wizard, a quote form with a terminal readout, a light/modern theme switch, and Greta, a pixel-art helper who wakes up to guide visitors.",
     stack: ["HTML", "CSS", "JavaScript", "No framework"],
-    price: "$XX",
+    price: "$79",
     status: "live",
     preview: "Images/templates/solaris-home-services.webp",
     demoUrl: "demos/solaris-home-services/index.html",
     buyLinks: [
-      { label: "Gumroad", url: "https://YOURNAME.gumroad.com/l/solaris" },
+      { label: "Gumroad", url: "https://2ndnatur3studios.gumroad.com/l/greta" },
     ],
   },
 ];
