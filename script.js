@@ -160,6 +160,75 @@ else you remain in a healing state longer than you need to be.</strong></p>
 let journalData = publicJournalData;
 
 // ===========================================================================
+// DEMO DRAWER: TEMPLATE CATALOG
+// Add one object per template. status: "live" | "coming-soon"
+// ===========================================================================
+const templateCatalog = [
+  {
+    name: "Solaris Home Services",
+    blurb:
+      "A retro desktop-style site for home service businesses: a service explorer, a how-it-works wizard, a quote form with a terminal readout, a light/modern theme switch, and Greta, a pixel-art helper who wakes up to guide visitors.",
+    stack: ["HTML", "CSS", "JavaScript", "No framework"],
+    price: "$XX",
+    status: "live",
+    preview: "Images/templates/solaris-home-services.webp",
+    demoUrl: "demos/solaris-home-services/index.html",
+    buyLinks: [
+      { label: "Gumroad", url: "https://YOURNAME.gumroad.com/l/solaris" },
+    ],
+  },
+];
+
+function renderTemplateCatalog() {
+  const cards = templateCatalog
+    .map((t) => {
+      const isLive = t.status === "live";
+
+      const preview = t.preview
+        ? `<div class="template-preview">
+        <img src="${t.preview}" alt="${t.name} preview" loading="lazy">
+       </div>`
+        : "";
+
+      const stack = (t.stack || [])
+        .map((s) => `<span class="tag-pill">[${s}]</span>`)
+        .join("");
+
+      const demoBtn =
+        isLive && t.demoUrl
+          ? `<a href="${t.demoUrl}" target="_blank" rel="noopener" class="template-btn">▶ Run Demo</a>`
+          : "";
+
+      const buyBtns = isLive
+        ? (t.buyLinks || [])
+            .map(
+              (link) =>
+                `<a href="${link.url}" target="_blank" rel="noopener" class="template-btn template-buy">
+                   ⇩ ${link.label}${t.price ? " · " + t.price : ""}
+                 </a>`,
+            )
+            .join("")
+        : `<span class="template-status">[ COMPILING... RELEASE PENDING ]</span>`;
+
+      return `
+        <li class="template-card ${isLive ? "" : "is-pending"}">
+          ${preview}
+          <h4>> ${t.name}</h4>
+          <p>${t.blurb}</p>
+          <div class="tag-container">${stack}</div>
+          <div class="template-actions">${demoBtn}${buyBtns}</div>
+        </li>`;
+    })
+    .join("");
+
+  return `
+    <h3>[ DIRECTORY: DEMOS & TEMPLATES ]</h3>
+    <p>Field-tested builds, packaged for your own experiments. Run the demo, then take one home.</p>
+    <ul class="template-grid">${cards}</ul>
+  `;
+}
+
+// ===========================================================================
 // SITE CONTENT & DIRECTORIES
 // ===========================================================================
 const siteContent = {
@@ -226,6 +295,8 @@ const siteContent = {
   </ul>
   <p><em>[ ADDITONAL SOURCE CODE ARCHIVES PENDING DECLASSIFICATION ]</em></p>
   `,
+
+  "> demos.pkg": renderTemplateCatalog(),
 
   "> contact.bat": `
   <h3>[ EXECUTING: CONTACT PROTOCOL ]</h3>
