@@ -223,7 +223,7 @@ function renderTemplateCatalog() {
 
   return `
     <h3>[ DIRECTORY: DEMOS & TEMPLATES ]</h3>
-    <p>Field-tested builds, packaged for your own experiments. Run the demo, then take one home.</p>
+    <p>Field-tested builds, some packaged for your own experiments.</p>
     <ul class="template-grid">${cards}</ul>
   `;
 }
