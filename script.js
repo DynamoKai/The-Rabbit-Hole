@@ -237,7 +237,7 @@ const siteContent = {
   <div class="about-container">
     <img src="Images/Whiterabbit.watch-copy.webp" class="rabbit-glitch" alt="The White Rabbit">
     <p><strong>> USER: AR Bly</strong></p>
-    <p>Welcome to 2nd Natur3 Studios. I am a multidisciplinary builder, systems architect, and game tester.</strong>.</p>
+    <p>Welcome to 2nd Natur3 Studios. I am a multidisciplinary builder, systems architect, and game tester.</p>
     <p>Great digital environments demand both chaotic creativity and absolute structural logic. Whether I am building a custom UI from the ground up, directing a product lifecycle, or breaking game mechanics to see how they tick, my process mirrors an endurance run. It is about establishing the pace, adapting to the terrain, and executing until the final mile.</p>
     <p>When I log off, I am usually testing my own physical limits on the trails, dropping a needle on a record, stargazing, or off-grid with my partner and our dog, Calypso.</p>
     </div>
@@ -344,22 +344,6 @@ drawers.forEach((drawer) => {
       }
       iteration += 1 / 3;
     }, 30);
-  });
-
-  drawer.addEventListener("click", (event) => {
-    const action = event.currentTarget.dataset.action;
-    const drawerName = event.currentTarget.dataset.originalText;
-
-    if (action === "enter-hole") {
-      landingPage.classList.add("hidden");
-      rabbitHoleApp.classList.remove("hidden");
-    } else if (action === "terminal") {
-      terminalTitle.innerText = `Executing: ${drawerName}`;
-      terminalBody.innerHTML =
-        siteContent[drawerName] || "<p>Error: File corrupted.</p>";
-      terminalDisplay.classList.remove("hidden");
-      terminalDisplay.scrollIntoView({ behavior: "smooth" });
-    }
   });
 });
 
@@ -519,11 +503,20 @@ function highlightText(text, query) {
   // If there's no search query, return the normal text
   if (!query) return text;
 
-  // Create a regex that finds the query (case-insensitive)
-  const regex = new RegExp(` (${query})`, "gi");
+  // Escape regex special characters so searches like "(" or "[" can't crash the page
+  const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`(${safeQuery})`, "gi");
 
-  // Replace the matched text with the highlighted span
-  return text.replace(regex, '<span class="search-highlight">$1</span>');
+  // Only highlight visible text, never the insides of HTML tags
+  // (otherwise searching "class" or "span" would break the markup)
+  return text
+    .split(/(<[^>]+>)/g)
+    .map((part) =>
+      part.startsWith("<")
+        ? part
+        : part.replace(regex, '<span class="search-highlight">$1</span>'),
+    )
+    .join("");
 }
 
 // HELPER FUNCTION TO PARSE MARKDOWN & ANECDOTES
@@ -551,10 +544,10 @@ function parseMarkdown(text, timestamp) {
 
 // TOP TAGS LOGIC
 function updateTopTags() {
-  const entries = JSON.parse(localStorage.getItem("rabbitHoles")) || [];
+  // Count tags from the public ledger (the journal no longer reads localStorage)
+  const entries = Object.values(publicJournalData);
   const tagCounts = {};
 
-  // Loop through all entries and count the tags
   entries.forEach((entry) => {
     if (entry.tags && Array.isArray(entry.tags)) {
       entry.tags.forEach((tag) => {
@@ -570,26 +563,23 @@ function updateTopTags() {
     .sort((a, b) => tagCounts[b] - tagCounts[a])
     .slice(0, 3);
 
-  // Render to the container
   const container = document.getElementById("top-tags-container");
   if (!container) return; // Safety check
+  container.innerHTML = "";
 
-  if (top3Tags.length === 0) {
-    container.innerHTML = ""; // Clear if no tags exist
-    return;
-  }
-
-  // mapping the tags into the HTML and adding click feature to auto search
-  container.innerHTML = top3Tags
-    .map(
-      (tag) =>
-        `<span class="tag-pill top-tag" onclick="
-          const search = document.getElementById('curiositySearch');
-          search.value = '${tag}';
-          search.dispatchEvent(new Event('input'));
-          ">#${tag}</span>`,
-    )
-    .join("");
+  // Build each pill as a real element so tags with quotes can't break the click
+  top3Tags.forEach((tag) => {
+    const pill = document.createElement("span");
+    pill.className = "tag-pill top-tag";
+    pill.textContent = `#${tag}`;
+    pill.addEventListener("click", () => {
+      const search = document.getElementById("curiositySearch");
+      if (!search) return;
+      search.value = tag;
+      search.dispatchEvent(new Event("input"));
+    });
+    container.appendChild(pill);
+  });
 }
 
 console.log(
