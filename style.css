@@ -874,3 +874,115 @@ body {
   opacity: 0;
   pointer-events: none;
 }
+
+/* =========================================================================== */
+/* DEMO DRAWER: TEMPLATE CATALOG                                               */
+/* =========================================================================== */
+.cabinet-drawer:nth-child(6) {
+  animation-delay: 1.2s;
+}
+
+.template-grid {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.template-card {
+  background: rgba(20, 83, 45, 0.1);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.template-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(192, 132, 252, 0.2);
+}
+.template-card.is-pending {
+  opacity: 0.6;
+  border-top-style: dashed;
+}
+.template-card h4 {
+  color: var(--accent);
+  margin: 0;
+  letter-spacing: 1px;
+}
+.template-card p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.template-preview {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.template-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.template-preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(5, 7, 10, 0.4) 3px,
+    rgba(5, 7, 10, 0.4) 4px
+  );
+  pointer-events: none;
+}
+
+.template-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.template-btn {
+  display: inline-block;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+  padding: 5px 15px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+.template-btn:hover {
+  background: var(--text-primary);
+  color: var(--bg-color);
+  box-shadow: 0 0 15px var(--glow);
+}
+.template-buy {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.template-buy:hover {
+  background: var(--accent);
+  color: var(--bg-color);
+  box-shadow: 0 0 15px rgba(192, 132, 252, 0.4);
+}
+.template-status {
+  color: #64748b;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
