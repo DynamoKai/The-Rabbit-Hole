@@ -1042,3 +1042,114 @@ body {
     padding: 4px 10px;
   }
 }
+
+/* 2nd Natur3 Studios — logo banner */
+:root {
+  --n3-ink: #e8f1f2;
+  --n3-accent: #c6f432;
+  --n3-cyan: #2de2e6;
+  --n3-magenta: #ff3b6b;
+  --n3-bg: #0e1116;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--n3-ink);
+  text-decoration: none;
+  font-family: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+}
+
+.brand__mark {
+  width: 3.5rem;
+  height: 3.5rem;
+  flex-shrink: 0;
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.brand__name {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.brand__3 {
+  display: inline-block;
+  color: var(--n3-accent);
+  text-shadow:
+    -2px 0 var(--n3-cyan),
+    2px 0 var(--n3-magenta);
+}
+
+.brand__sub {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding-left: 2px;
+}
+
+/* A quick glitch on hover/focus only, skipped for reduced-motion users */
+@media (prefers-reduced-motion: no-preference) {
+  .brand:hover .brand__3,
+  .brand:focus-visible .brand__3 {
+    animation: n3-glitch 360ms steps(2) 1;
+  }
+}
+
+@keyframes n3-glitch {
+  0% {
+    transform: translate(0, 0);
+    text-shadow:
+      -2px 0 var(--n3-cyan),
+      2px 0 var(--n3-magenta);
+  }
+  33% {
+    transform: translate(-2px, 1px);
+    text-shadow:
+      -5px 0 var(--n3-cyan),
+      4px 0 var(--n3-magenta);
+  }
+  66% {
+    transform: translate(2px, -1px);
+    text-shadow:
+      4px 0 var(--n3-cyan),
+      -5px 0 var(--n3-magenta);
+  }
+  100% {
+    transform: translate(0, 0);
+    text-shadow:
+      -2px 0 var(--n3-cyan),
+      2px 0 var(--n3-magenta);
+  }
+}
+
+.brand:focus-visible {
+  outline: 2px solid var(--n3-accent);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+@media (max-width: 520px) {
+  .brand {
+    gap: 0.6rem;
+  }
+  .brand__mark {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .brand__name {
+    font-size: 1.6rem;
+  }
+  .brand__sub {
+    font-size: 0.6rem;
+  }
+}
