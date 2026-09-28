@@ -486,11 +486,13 @@ function openAnecdote(phrase, content, timestamp) {
 
   document.getElementById("anecdote-sidebar").classList.add("active");
   document.getElementById("sidebar-overlay").classList.add("active");
+  document.body.style.overflow = "hidden"; // stops page scrolling behind the panel
 }
 
 function closeSidebar() {
   document.getElementById("anecdote-sidebar").classList.remove("active");
   document.getElementById("sidebar-overlay").classList.remove("active");
+  document.body.style.overflow = ""; // stops page scrolling behind panel
 }
 
 // Transforms the "Save" button into a scratchpad closer for the read-only ledger
