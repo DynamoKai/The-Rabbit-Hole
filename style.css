@@ -299,6 +299,8 @@ button:hover {
 /* Tag container */
 .top-tags-wrapper {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px; /* space between tags */
   margin-bottom: 20px;
   align-items: center;
@@ -314,6 +316,7 @@ button:hover {
   font-weight: 600;
   text-transform: capitalize;
   cursor: crosshair;
+  white-space: nowrap;
 }
 
 /* Tag Pill Style */
@@ -1032,5 +1035,10 @@ body {
 
   .close-btn {
     flex-shrink: 0;
+  }
+
+  .tag-pill.top-tag {
+    font-size: 12px;
+    padding: 4px 10px;
   }
 }
