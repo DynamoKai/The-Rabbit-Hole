@@ -996,3 +996,41 @@ body {
   font-size: 0.75rem;
   letter-spacing: 1px;
 }
+
+/* =========================================================================== */
+/* MOBILE: ANECDOTE SIDEBAR                                                    */
+/* =========================================================================== */
+@media (max-width: 600px) {
+  .sidebar {
+    width: 100vw;
+    border-left: none;
+    border-top: 2px solid var(--accent);
+    padding: 1.25rem;
+  }
+
+  .crt-image-container {
+    width: 55%;
+    max-width: 200px;
+    margin-bottom: 1rem;
+  }
+  .sidebar-header {
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
+
+  #sidebar-title {
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+  }
+
+  #sidebar-content {
+    height: auto;
+    min-height: 150px;
+    flex: 1;
+    font-size: 16px; /* stops iOS Safari from auto-zooming on tap */
+  }
+
+  .close-btn {
+    flex-shrink: 0;
+  }
+}
