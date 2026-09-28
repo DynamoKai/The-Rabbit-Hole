@@ -4,14 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>2nd Natur3 Studios</title>
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="Images/logo/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="Images/logo/apple-touch-icon.png">
-    <link rel="manifest" href="site.webmanifest">
-    <meta name="theme-color" content="#0E1116">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="Images/logo/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="Images/logo/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <meta name="theme-color" content="#0E1116" />
+    <meta
+      name="description"
+      content="2nd Natur3 Studios — web design and development."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="2nd Natur3 Studios" />
+    <meta property="og:title" content="2nd Natur3 Studios" />
+    <meta property="og:description" content="Web design and development." />
+    <meta property="og:url" content="https://2ndnatur3studios.com/" />
+    <meta
+      property="og:image"
+      content="https://2ndnatur3studios.com/Images/og-image.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="2nd Natur3 Studios logo" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
 
@@ -21,12 +41,20 @@
     <main id="landing-page">
       <section class="apothecary-cabinet" id="main-cabinet">
         <a class="brand" href="/" aria-label="2nd Natur3 Studios, home">
-    <img class="brand__mark" src="Images/logo/logo-mark-dark.svg" alt="" width="56" height="56">
-    <span class="brand__text" aria-hidden="true">
-      <span class="brand__name">2nd Natur<span class="brand__3">3</span></span>
-      <span class="brand__sub">Studios</span>
-    </span>
-  </a>
+          <img
+            class="brand__mark"
+            src="Images/logo/logo-mark-dark.svg"
+            alt=""
+            width="56"
+            height="56"
+          />
+          <span class="brand__text" aria-hidden="true">
+            <span class="brand__name"
+              >2nd Natur<span class="brand__3">3</span></span
+            >
+            <span class="brand__sub">Studios</span>
+          </span>
+        </a>
         <!-- Drawer 1: About -->
         <div
           class="cabinet-drawer"
@@ -61,7 +89,7 @@
         </div>
 
         <!-- Drawer 4: Demos & Templates -->
-         <div
+        <div
           class="cabinet-drawer"
           data-action="terminal"
           data-original-text="> demos.pkg"
@@ -70,7 +98,6 @@
             <span class="terminal-label">> demos.pkg</span>
           </div>
         </div>
-
 
         <!-- Drawer 5: TRH -->
         <div
@@ -105,72 +132,116 @@
     </main>
 
     <!-- ROOM 2: TRH -->
-   <div id="rabbit-hole-app" class="hidden">
-  <div class="container">
+    <div id="rabbit-hole-app" class="hidden">
+      <div class="container">
+        <header>
+          <h1>The Rabbit Hole</h1>
+          <p>Documenting descents into the known and unknown.</p>
+          <div class="file-controls">
+            <button id="sort-btn" class="util-btn">Sort: Newest First</button>
+            <button
+              id="exit-hole-btn"
+              class="util-btn"
+              style="margin-left: 1rem"
+            >
+              << Return to Nature
+            </button>
+          </div>
+        </header>
 
-    <header>
-      <h1>The Rabbit Hole</h1>
-      <p>Documenting descents into the known and unknown.</p>
-      <div class="file-controls">
-        <button id="sort-btn" class="util-btn">Sort: Newest First</button>
-        <button id="exit-hole-btn" class="util-btn" style="margin-left: 1rem"><< Return to Nature</button>
-      </div>
-    </header>
+        <hr class="dotted-line" />
+        <div id="top-tags-container" class="top-tags-wrapper"></div>
 
-    <hr class="dotted-line" />
-    <div id="top-tags-container" class="top-tags-wrapper"></div>
+        <!-- READ-ONLY CONTROLS -->
+        <section class="view-controls">
+          <div class="depth-selector">
+            <label for="depth">DEPTH LEVEL</label>
+            <input
+              type="range"
+              id="depth"
+              min="1"
+              max="5"
+              value="1"
+              oninput="
+                document.getElementById('depth-display').innerText = this.value
+              "
+            />
+            <span
+              id="depth-display"
+              style="color: var(--accent); font-weight: bold"
+              >1</span
+            >
+          </div>
+        </section>
 
-    <!-- READ-ONLY CONTROLS -->
-    <section class="view-controls">
-      <div class="depth-selector">
-        <label for="depth">DEPTH LEVEL</label>
-        <input type="range" id="depth" min="1" max="5" value="1" oninput="document.getElementById('depth-display').innerText = this.value" />
-        <span id="depth-display" style="color: var(--accent); font-weight: bold">1</span>
-      </div>
-    </section>
+        <!-- ANECDOTE SIDEBAR (SCRATCHPAD) -->
+        <div id="anecdote-sidebar" class="sidebar">
+          <div class="crt-image-container">
+            <img
+              src="Images/Whiterabbit.watch-copy.webp"
+              alt="White Rabbit"
+              class="crt-image"
+            />
+          </div>
+          <div class="sidebar-header">
+            <h2 id="sidebar-title">Anecdote</h2>
+            <button onclick="closeSidebar()" class="close-btn">✕</button>
+          </div>
+          <div class="sidebar-body">
+            <textarea
+              id="sidebar-content"
+              placeholder="Why is a raven like a writing-desk?"
+            ></textarea>
+            <button id="save-anecdote-btn" class="util-btn">
+              Save Changes
+            </button>
+          </div>
+        </div>
+        <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-    <!-- ANECDOTE SIDEBAR (SCRATCHPAD) -->
-    <div id="anecdote-sidebar" class="sidebar">
-      <div class="crt-image-container">
-        <img src="Images/Whiterabbit.watch-copy.webp" alt="White Rabbit" class="crt-image" />
+        <!-- SEARCH & FILTER -->
+        <div class="search-console">
+          <span class="prompt-symbol">Search me</span>
+          <input
+            type="text"
+            id="curiositySearch"
+            placeholder="Why is a raven like a writing desk?"
+            autocomplete="off"
+          />
+        </div>
+
+        <section class="filter-section">
+          <input
+            type="text"
+            id="tag-filter"
+            placeholder="Filter by tag (e.g, physics, stars, artificial intelligence)..."
+          />
+        </section>
+
+        <!-- OUTPUT LEDGER -->
+        <section id="journal-output" class="journal-list">
+          <!-- Entries render here -->
+        </section>
       </div>
-      <div class="sidebar-header">
-        <h2 id="sidebar-title">Anecdote</h2>
-        <button onclick="closeSidebar()" class="close-btn">✕</button>
-      </div>
-      <div class="sidebar-body">
-        <textarea id="sidebar-content" placeholder="Why is a raven like a writing-desk?"></textarea>
-        <button id="save-anecdote-btn" class="util-btn">Save Changes</button>
-      </div>
+      <!-- Closes container -->
     </div>
-    <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+    <!-- Closes rabbit-hole-app -->
 
-    <!-- SEARCH & FILTER -->
-    <div class="search-console">
-      <span class="prompt-symbol">Search me</span>
-      <input type="text" id="curiositySearch" placeholder="Why is a raven like a writing desk?" autocomplete="off" />
-    </div>
+    <!-- The Ambient Drawer Cue -->
+    <audio id="drawer-sound" src="Audio/synth-swell.mp3" preload="auto"></audio>
+    <script src="script.js"></script>
 
-    <section class="filter-section">
-      <input type="text" id="tag-filter" placeholder="Filter by tag (e.g, physics, stars, artificial intelligence)..." />
-    </section>
-
-    <!-- OUTPUT LEDGER -->
-    <section id="journal-output" class="journal-list">
-      <!-- Entries render here -->
-    </section>
-
-  </div> <!-- Closes container -->
-</div> <!-- Closes rabbit-hole-app -->
-
-      <!-- The Ambient Drawer Cue -->
-      <audio
-        id="drawer-sound"
-        src="Audio/synth-swell.mp3"
-        preload="auto"
-      ></audio>
-      <script src="script.js"></script>
-    </div>
-    <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="DynamoKai" data-description="Support me on Buy me a coffee!" data-message="Using something made by me? Buy me a coffee, yeah?" data-color="#40DCA5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+    <script
+      data-name="BMC-Widget"
+      data-cfasync="false"
+      src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+      data-id="DynamoKai"
+      data-description="Support me on Buy me a coffee!"
+      data-message="Using something made by me? Buy me a coffee, yeah?"
+      data-color="#40DCA5"
+      data-position="Right"
+      data-x_margin="18"
+      data-y_margin="18"
+    ></script>
   </body>
 </html>
